@@ -1,1216 +1,1692 @@
 ```html
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-50">
+<html lang="hi" class="h-full bg-slate-50">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHREE MALOOK RESTAURANT — Pure Veg Cloud Kitchen</title>
-    <!-- Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHREE MALOOK RESTAURANT | 100% Pure Veg Cloud Kitchen</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        veg: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d',
-                        },
-                        saffron: {
-                            400: '#fbbf24',
-                            500: '#f59e0b',
-                            600: '#d97706',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        veg: { light: '#ecfdf5', DEFAULT: '#10b981', dark: '#047857' },
+                        brand: { light: '#fffbeb', DEFAULT: '#d97706', dark: '#b45309' }
                     }
                 }
             }
         }
     </script>
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @keyframes ring-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-            70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        .pulse-veg { animation: pulseVeg 2s infinite; }
+        @keyframes pulseVeg {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
-        .animate-ring-alert {
-            animation: ring-pulse 1.2s infinite;
+        .alarm-flash { animation: alarmFlash 0.8s infinite alternate; }
+        @keyframes alarmFlash {
+            from { background-color: rgba(239, 68, 68, 0.15); }
+            to { background-color: rgba(239, 68, 68, 0.45); }
         }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     </style>
 </head>
-<body class="h-full flex flex-col text-slate-800 bg-slate-50 antialiased selection:bg-veg-500 selection:text-white">
+<body class="h-full text-slate-800 antialiased flex flex-col font-sans selection:bg-emerald-200">
 
-    <div id="app-root" class="min-h-screen flex flex-col relative pb-20 md:pb-0">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand & Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('customer-home')">
+                    <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-extrabold text-xl shadow-md border-2 border-emerald-400">
+                        🟢
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-black text-slate-900 text-lg leading-tight tracking-tight">SHREE MALOOK</h1>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.5 rounded border border-emerald-300">100% PURE VEG</span>
+                        </div>
+                        <p class="text-[11px] font-bold text-amber-600 tracking-wider">CLOUD KITCHEN • SELF DELIVERY ONLY</p>
+                    </div>
+                </div>
 
-        <!-- GLOBAL HEADER / MODE SWITCHER BAR -->
-        <header class="bg-slate-900 text-white text-xs py-1.5 px-3 flex justify-between items-center border-b border-slate-800 sticky top-0 z-50">
-            <div class="flex items-center space-x-2">
-                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="font-bold tracking-wide uppercase text-slate-200">Shree Malook Live System</span>
-            </div>
-            <div class="flex items-center space-x-2">
-                <button id="btn-sound-toggle" onclick="toggleAudioAlarmPermission()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-2 py-1 rounded flex items-center gap-1 font-medium transition">
-                    <span id="sound-icon">🔔</span> <span id="sound-text">Enable Audio Ring</span>
-                </button>
-                <div class="bg-slate-800 p-0.5 rounded-lg flex border border-slate-700">
-                    <button id="nav-mode-customer" onclick="switchViewMode('customer')" class="px-3 py-1 rounded text-xs font-semibold bg-veg-600 text-white transition">
-                        🛒 Customer Site
+                <!-- Right Header Actions -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <!-- Restaurant Live Status Pill -->
+                    <div id="header-status-pill" class="hidden sm:flex items-center px-3 py-1 rounded-full text-xs font-bold transition-all">
+                        <span class="w-2 h-2 rounded-full mr-2 bg-slate-400 animate-ping"></span>
+                        Checking...
+                    </div>
+
+                    <!-- Mode Switch (Customer vs Admin) -->
+                    <button id="view-toggle-btn" onclick="toggleAdminCustomerView()" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors flex items-center space-x-1">
+                        <i class="fa-solid fa-user-shield text-slate-500"></i>
+                        <span id="view-toggle-text">Admin Panel</span>
                     </button>
-                    <button id="nav-mode-admin" onclick="switchViewMode('admin')" class="px-3 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white transition">
-                        📱 Admin Portal
-                    </button>
+
+                    <!-- Customer Login Status / Profile -->
+                    <div id="customer-user-menu" class="flex items-center space-x-2">
+                        <button onclick="openAuthModal()" id="nav-login-btn" class="px-3 py-1.5 text-xs font-bold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 shadow-sm transition-all">
+                            Login / Signup
+                        </button>
+                    </div>
                 </div>
             </div>
-        </header>
-
-        <!-- RESTAURANT STATUS BANNER (CUSTOMER VIEW ONLY) -->
-        <div id="customer-status-banner" class="hidden">
-            <!-- Dynamic JS injection for Store ON/OFF banner -->
         </div>
 
-        <!-- MAIN VIEW PORT (CUSTOMER APP OR ADMIN APP) -->
-        <main id="main-content" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <!-- Content rendered dynamically via JS -->
-        </main>
+        <!-- Mobile Secondary Nav Sub-Bar -->
+        <div class="bg-emerald-950 text-emerald-100 text-xs py-1 px-4 flex justify-between items-center sm:px-8 border-t border-emerald-900">
+            <div class="flex items-center space-x-2 truncate">
+                <i class="fa-solid fa-leaf text-emerald-400"></i>
+                <span class="font-medium">Strictly Pure Vegetarian • Pure Hygiene Guaranteed</span>
+            </div>
+            <a href="https://wa.me/917339761118?text=Hello%20Shree%20Malook%20Restaurant" target="_blank" class="flex items-center text-emerald-300 hover:text-white font-bold space-x-1 underline">
+                <i class="fa-brands fa-whatsapp text-green-400 text-sm"></i>
+                <span>7339761118</span>
+            </a>
+        </div>
+    </header>
 
-        <!-- STICKY FOOTER CART BAR FOR MOBILE (CUSTOMER) -->
-        <div id="sticky-mobile-cart" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-3 shadow-2xl z-40 hidden md:hidden">
-            <div class="flex justify-between items-center max-w-md mx-auto">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-24">
+
+        <!-- Banner Alert when Restaurant is CLOSED -->
+        <div id="closed-banner" class="hidden mb-6 bg-red-50 border-2 border-red-300 rounded-2xl p-4 sm:p-6 text-center shadow-lg">
+            <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl font-bold">🔴</div>
+            <h3 class="text-lg sm:text-xl font-black text-red-900 mb-1">SHREE MALOOK RESTAURANT IS CURRENTLY CLOSED</h3>
+            <p id="closed-banner-message" class="text-sm font-medium text-red-700 max-w-xl mx-auto">
+                "Shree Malook Restaurant अभी बंद है। कृपया बाद में Order करें।"
+            </p>
+            <p class="text-xs text-red-500 mt-2 font-semibold">Accepted previously placed orders are still being prepared and delivered.</p>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- CUSTOMER VIEW: Home & Food Menu Selection  -->
+        <!-- ========================================== -->
+        <section id="view-customer-home" class="view-panel space-y-6">
+            
+            <!-- Hero Header Card -->
+            <div class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/30 text-emerald-200 border border-emerald-400/40 mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 pulse-veg"></span> 100% Pure Vegetarian Kitchen
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black tracking-tight mb-2">Delicious Pure Veg Meals Delivered Fast & Hot!</h2>
+                    <p class="text-emerald-100 text-xs sm:text-sm mb-4">Direct from our specialized Cloud Kitchen straight to your doorstep. Prepared under 100% Satvik & Hygienic conditions.</p>
+                    
+                    <div class="flex flex-wrap gap-4 text-xs font-semibold text-emerald-200">
+                        <div class="flex items-center space-x-1.5"><i class="fa-solid fa-truck-fast text-amber-400"></i><span>Self Delivery Only</span></div>
+                        <div class="flex items-center space-x-1.5"><i class="fa-solid fa-[#047857] text-emerald-400"></i><span>Min Order: ₹150</span></div>
+                        <div class="flex items-center space-x-1.5"><i class="fa-solid fa-certificate text-emerald-300"></i><span>Zero Non-Veg Zone</span></div>
+                    </div>
+                </div>
+                <!-- Background decorative elements -->
+                <div class="absolute -right-10 -bottom-10 opacity-15 text-9xl font-black select-none pointer-events-none text-emerald-100">🥗</div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-4">
                 <div>
-                    <p class="text-xs text-slate-500"><span id="sticky-cart-count">0</span> Items in Cart</p>
-                    <p class="text-lg font-extrabold text-slate-900" id="sticky-cart-total">₹0</p>
+                    <h3 class="text-xl font-black text-slate-900">Explore Menu</h3>
+                    <p class="text-xs text-slate-500">Choose from delicious 100% Pure Veg Dishes</p>
                 </div>
-                <button onclick="openCheckoutModal()" class="bg-veg-600 hover:bg-veg-700 active:bg-veg-800 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg flex items-center space-x-2 transition">
-                    <span>View Cart & Checkout</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                
+                <!-- Search Bar & Filters -->
+                <div class="w-full sm:w-auto flex items-center space-x-2">
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                        <input type="text" id="menu-search-input" onkeyup="filterMenu()" placeholder="Search veg dishes..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Horizontal Scroll -->
+            <div id="category-pills" class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+                <!-- Dynamic Category Buttons populated here -->
+            </div>
+
+            <!-- Food Items Grid -->
+            <div id="food-menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Dynamic Food Cards inserted via JS -->
+            </div>
+        </section>
+
+        <section id="view-customer-checkout" class="view-panel hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <button onclick="switchView('customer-home')" class="text-xs font-bold text-slate-600 hover:text-emerald-700 flex items-center space-x-1">
+                    <i class="fa-solid fa-arrow-left"></i> <span>Back to Menu</span>
+                </button>
+                <h2 class="text-xl font-black text-slate-900">Checkout & Delivery Details</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Delivery Details & Customer Address Form (Left 7 Columns) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Delivery Info Alert Card -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 space-y-1">
+                        <div class="font-bold flex items-center space-x-2 text-amber-800">
+                            <i class="fa-solid fa-circle-info text-amber-600"></i>
+                            <span>Delivery Area & Policies</span>
+                        </div>
+                        <p>• Delivery available within <strong id="checkout-radius-text">8 KM</strong> of Shree Malook Kitchen.</p>
+                        <p>• Minimum Order Value: <strong id="checkout-min-text">₹150</strong></p>
+                        <p>• Free Delivery on orders above <strong id="checkout-free-text">₹500</strong> (Else Delivery Charge: <span id="checkout-fee-text">₹30</span>)</p>
+                    </div>
+
+                    <!-- Customer Contact & Address Form -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider flex items-center space-x-2">
+                            <i class="fa-solid fa-location-dot text-emerald-600"></i>
+                            <span>Delivery Address</span>
+                        </h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
+                                <input type="text" id="cust-name" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-semibold">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Mobile Phone Number *</label>
+                                <input type="tel" id="cust-phone" placeholder="10 Digit Phone Number" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-semibold">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-xs font-bold text-slate-700">Full Delivery Street Address *</label>
+                                <button type="button" onclick="detectGPSLocation()" class="text-[11px] font-extrabold text-emerald-600 hover:text-emerald-800 flex items-center space-x-1">
+                                    <i class="fa-solid fa-location-crosshairs"></i>
+                                    <span>Auto-Detect GPS</span>
+                                </button>
+                            </div>
+                            <textarea id="cust-address" rows="3" placeholder="House/Flat No., Building, Street Name, Sector/Area..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Landmark / Nearby Spot</label>
+                                <input type="text" id="cust-landmark" placeholder="Near Temple, Opposite School..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Cooking Instructions / Order Notes</label>
+                                <input type="text" id="cust-notes" placeholder="Less spicy, extra green chutney..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Hidden GPS Coordinates -->
+                        <input type="hidden" id="cust-lat" value="">
+                        <input type="hidden" id="cust-lng" value="">
+                        <div id="gps-status-badge" class="hidden text-[11px] text-emerald-700 font-bold bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
+                            ✓ GPS Coordinates Captured Successfully
+                        </div>
+                    </div>
+
+                    <!-- Payment Option Selection -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider flex items-center space-x-2">
+                            <i class="fa-solid fa-wallet text-emerald-600"></i>
+                            <span>Select Payment Method</span>
+                        </h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center space-x-3 p-3 border border-emerald-500 bg-emerald-50/50 rounded-xl cursor-pointer">
+                                <input type="radio" name="payment-method" value="COD" checked class="text-emerald-600 focus:ring-emerald-500">
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900">Cash / UPI on Delivery</div>
+                                    <div class="text-[10px] text-slate-500">Pay cash or scan QR when food arrives</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-slate-200 rounded-xl cursor-pointer opacity-60">
+                                <input type="radio" name="payment-method" value="ONLINE" disabled class="text-emerald-600">
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900">Online Payment</div>
+                                    <div class="text-[10px] text-slate-500">Currently COD only</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm sticky top-20">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100 flex items-center justify-between">
+                            <span>Order Summary</span>
+                            <span class="text-xs text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full font-bold">100% Pure Veg</span>
+                        </h3>
+
+                        <!-- Selected Items Container -->
+                        <div id="cart-summary-items" class="divide-y divide-slate-100 max-h-60 overflow-y-auto pr-1 mb-4">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <!-- Bill Calculation breakdown -->
+                        <div class="border-t border-slate-200 pt-3 space-y-2 text-xs">
+                            <div class="flex justify-between text-slate-600">
+                                <span>Item Subtotal</span>
+                                <span id="bill-subtotal" class="font-bold text-slate-800">₹0</span>
+                            </div>
+                            <div class="flex justify-between text-slate-600">
+                                <span>Delivery Fee</span>
+                                <span id="bill-delivery" class="font-bold text-slate-800">₹0</span>
+                            </div>
+                            <div id="free-delivery-qualify" class="text-[11px] text-emerald-600 font-bold hidden">
+                                🎉 Free Delivery Applied!
+                            </div>
+                            <div class="flex justify-between text-base font-black text-slate-900 border-t border-slate-200 pt-2">
+                                <span>Grand Total</span>
+                                <span id="bill-grandtotal" class="text-emerald-700">₹0</span>
+                            </div>
+                        </div>
+
+                        <!-- Minimum Order Warning Box -->
+                        <div id="min-order-alert" class="hidden mt-4 bg-red-50 text-red-700 border border-red-200 text-xs p-3 rounded-xl font-semibold">
+                            <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+                            Minimum order amount is ₹<span id="min-order-val">150</span>. Please add more items to place order.
+                        </div>
+
+                        <!-- Place Order Button -->
+                        <button id="place-order-btn" onclick="submitCustomerOrder()" class="mt-4 w-full py-3.5 bg-emerald-600 text-white font-extrabold text-sm rounded-xl shadow-lg hover:bg-emerald-700 active:scale-[0.99] transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            <span>CONFIRM & PLACE ORDER</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-customer-orders" class="view-panel hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                <h2 class="text-xl font-black text-slate-900">My Orders & Live Status</h2>
+                <button onclick="switchView('customer-home')" class="text-xs font-bold text-emerald-600 border border-emerald-300 px-3 py-1.5 rounded-lg hover:bg-emerald-50">
+                    + Order More Food
                 </button>
             </div>
+
+            <div id="customer-orders-container" class="space-y-4">
+                <!-- Dynamic customer order tracking cards populated via JS -->
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- RESTAURANT ADMIN PANEL VIEW (MOBILE FIRST) -->
+        <!-- ========================================== -->
+        <section id="view-admin-panel" class="view-panel hidden space-y-6">
+            
+            <!-- ADMIN LOGIN CONTAINER (if not authenticated) -->
+            <div id="admin-login-card" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-4">
+                <div class="text-center">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-2xl font-black mb-2">🔐</div>
+                    <h3 class="text-xl font-black text-slate-900">Restaurant Staff Login</h3>
+                    <p class="text-xs text-slate-500">Access Shree Malook Admin Control Panel</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Admin Passcode / Key</label>
+                    <input type="password" id="admin-pass-input" placeholder="Enter admin password (Default: admin123)" class="w-full px-4 py-2.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none font-bold">
+                </div>
+                <button onclick="authenticateAdmin()" class="w-full py-3 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors">
+                    Login to Kitchen Dashboard
+                </button>
+            </div>
+
+            <!-- ADMIN DASHBOARD CONTENT (shown after login) -->
+            <div id="admin-dashboard-content" class="hidden space-y-6">
+                
+                <!-- TOP PROMINENT CONTROLS HEADER -->
+                <div class="bg-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <span class="text-[10px] font-extrabold tracking-widest text-emerald-400 uppercase">Shree Malook Cloud Kitchen</span>
+                            <h2 class="text-2xl font-black">Mobile Kitchen Manager</h2>
+                        </div>
+                        
+                        <!-- AUDIO RING PERMISSION BUTTON -->
+                        <div class="flex items-center space-x-2">
+                            <button id="enable-audio-btn" onclick="enableAudioAlerts()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black rounded-xl shadow flex items-center space-x-2 transition-transform active:scale-95">
+                                <i class="fa-solid fa-bell font-bold"></i>
+                                <span id="audio-btn-text">🔔 ENABLE AUDIO RING</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PROMINENT RESTAURANT OPEN / CLOSED TOGGLE -->
+                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3 w-full sm:w-auto">
+                            <div id="admin-status-indicator" class="w-5 h-5 rounded-full bg-emerald-500 pulse-veg"></div>
+                            <div>
+                                <div class="text-xs text-slate-400 font-bold uppercase">Current Restaurant Status</div>
+                                <div id="admin-status-text" class="text-lg font-black text-emerald-400">🟢 RESTAURANT OPEN</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2 w-full sm:w-auto">
+                            <button onclick="toggleRestaurantStatus(true)" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition-colors">
+                                SET OPEN 🟢
+                            </button>
+                            <button onclick="toggleRestaurantStatus(false)" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-black text-xs transition-colors">
+                                SET CLOSED 🔴
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CUSTOM CLOSED REASON EDITOR -->
+                    <div id="closed-msg-editor" class="hidden pt-2">
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Custom Closed Message for Customers:</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="custom-closed-msg" placeholder="e.g. आज Kitchen बंद है। Orders शाम 6 बजे शुरू होंगे।" class="flex-1 px-3 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                            <button onclick="saveClosedMessage()" class="px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-500">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADMIN SUB-NAV TABS -->
+                <div class="flex items-center space-x-2 overflow-x-auto pb-2 border-b border-slate-200 scrollbar-none">
+                    <button onclick="switchAdminTab('live-orders')" id="adm-tab-live-orders" class="adm-tab-btn active px-4 py-2 font-black text-xs rounded-xl bg-emerald-600 text-white shadow-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-bell-concierge"></i>
+                        <span>NEW & LIVE ORDERS</span>
+                        <span id="badge-new-count" class="bg-red-500 text-white px-1.5 py-0.2 text-[10px] rounded-full hidden">0</span>
+                    </button>
+                    <button onclick="switchAdminTab('menu-mgr')" id="adm-tab-menu-mgr" class="adm-tab-btn px-4 py-2 font-bold text-xs rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center space-x-1">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Menu & Availability</span>
+                    </button>
+                    <button onclick="switchAdminTab('sales-report')" id="adm-tab-sales-report" class="adm-tab-btn px-4 py-2 font-bold text-xs rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center space-x-1">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Sales Report</span>
+                    </button>
+                    <button onclick="switchAdminTab('settings')" id="adm-tab-settings" class="adm-tab-btn px-4 py-2 font-bold text-xs rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center space-x-1">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Delivery Settings</span>
+                    </button>
+                </div>
+
+                <!-- ADMIN TAB 1: LIVE ORDERS SCREEN -->
+                <div id="adm-view-live-orders" class="adm-sub-panel space-y-4">
+                    <!-- Audio Ring Active Notice -->
+                    <div id="alarm-banner" class="hidden alarm-flash p-4 rounded-2xl border-2 border-red-500 text-red-900 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl animate-bounce">🔔</span>
+                            <div>
+                                <div class="font-black text-base">NEW ORDER RECEIVED!</div>
+                                <div class="text-xs font-bold">Ring Alarm is ACTIVE until accepted or cancelled.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Status Filter Pills -->
+                    <div class="flex gap-2 overflow-x-auto text-xs font-bold pb-1">
+                        <button onclick="filterAdminOrders('ALL')" class="px-3 py-1.5 bg-slate-800 text-white rounded-lg">ALL</button>
+                        <button onclick="filterAdminOrders('NEW')" class="px-3 py-1.5 bg-red-100 text-red-800 border border-red-300 rounded-lg">NEW 🔔</button>
+                        <button onclick="filterAdminOrders('ACCEPTED')" class="px-3 py-1.5 bg-blue-100 text-blue-800 border border-blue-300 rounded-lg">ACCEPTED 🟢</button>
+                        <button onclick="filterAdminOrders('PREPARING')" class="px-3 py-1.5 bg-amber-100 text-amber-800 border border-amber-300 rounded-lg">PREPARING 👨‍🍳</button>
+                        <button onclick="filterAdminOrders('READY')" class="px-3 py-1.5 bg-indigo-100 text-indigo-800 border border-indigo-300 rounded-lg">READY 📦</button>
+                        <button onclick="filterAdminOrders('OUT_FOR_DELIVERY')" class="px-3 py-1.5 bg-purple-100 text-purple-800 border border-purple-300 rounded-lg">ON WAY 🛵</button>
+                        <button onclick="filterAdminOrders('DELIVERED')" class="px-3 py-1.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg">DELIVERED ✅</button>
+                    </div>
+
+                    <!-- Orders Feed Container -->
+                    <div id="admin-orders-feed" class="space-y-4">
+                        <!-- Admin Order Mobile Cards Rendered Here -->
+                    </div>
+                </div>
+
+                <!-- ADMIN TAB 2: MENU & ITEM AVAILABILITY MANAGER -->
+                <div id="adm-view-menu-mgr" class="adm-sub-panel hidden space-y-4">
+                    <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200">
+                        <div>
+                            <h3 class="font-black text-slate-900 text-base">Menu Items & Availability</h3>
+                            <p class="text-xs text-slate-500">Toggle Sold Out items or Add/Edit dishes (100% Pure Veg only)</p>
+                        </div>
+                        <button onclick="openAddDishModal()" class="px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl hover:bg-emerald-700 shadow-md">
+                            + Add New Pure Veg Item
+                        </button>
+                    </div>
+
+                    <!-- Category Quick Filter -->
+                    <div id="admin-menu-items-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Dynamic Editable Menu Items rendered here -->
+                    </div>
+                </div>
+
+                <!-- ADMIN TAB 3: SALES & ANALYTICS REPORT -->
+                <div id="adm-view-sales-report" class="adm-sub-panel hidden space-y-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-slate-500">Today's Revenue</div>
+                            <div id="stat-revenue" class="text-xl font-black text-emerald-600 mt-1">₹0</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-slate-500">Total Orders</div>
+                            <div id="stat-total-orders" class="text-xl font-black text-slate-900 mt-1">0</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-slate-500">Completed</div>
+                            <div id="stat-delivered-orders" class="text-xl font-black text-emerald-700 mt-1">0</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-slate-500">Cancelled</div>
+                            <div id="stat-cancelled-orders" class="text-xl font-black text-red-600 mt-1">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADMIN TAB 4: DELIVERY & KITCHEN SETTINGS -->
+                <div id="adm-view-settings" class="adm-sub-panel hidden space-y-4">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 max-w-2xl">
+                        <h3 class="font-black text-slate-900 text-base border-b border-slate-100 pb-2">Delivery & Order Threshold Configuration</h3>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-bold">
+                            <div>
+                                <label class="block text-slate-700 mb-1">Max Delivery Radius (KM)</label>
+                                <input type="number" id="setting-radius" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 mb-1">Minimum Order Amount (₹)</label>
+                                <input type="number" id="setting-min-order" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 mb-1">Delivery Charge (₹)</label>
+                                <input type="number" id="setting-delivery-charge" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 mb-1">Free Delivery Threshold (₹)</label>
+                                <input type="number" id="setting-free-delivery" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 mb-1">WhatsApp Business Hotline</label>
+                                <input type="text" id="setting-whatsapp" value="7339761118" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                            </div>
+                        </div>
+
+                        <button onclick="saveAdminSettings()" class="w-full py-3 bg-emerald-600 text-white font-extrabold text-xs rounded-xl hover:bg-emerald-700 shadow-md">
+                            SAVE SETTINGS
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- STICKY BOTTOM CART BAR (FOR CUSTOMER MOBILE) -->
+    <div id="sticky-cart-bar" class="fixed bottom-0 left-0 right-0 bg-slate-900 text-white p-3 border-t border-slate-800 shadow-2xl z-30 transform transition-transform duration-300 translate-y-full">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-2">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center font-black text-sm">
+                    <span id="sticky-cart-count">0</span>
+                </div>
+                <div>
+                    <div id="sticky-cart-total" class="font-black text-base text-emerald-400">₹0</div>
+                    <div class="text-[10px] text-slate-300 font-medium">Click to Review & Checkout</div>
+                </div>
+            </div>
+            <button onclick="switchView('customer-checkout')" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all">
+                VIEW CART & CHECKOUT <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
         </div>
-
-        <!-- MODALS CONTAINER -->
-        <div id="modals-container"></div>
-
     </div>
 
-    <!-- Firebase JS SDK (v11.6.1) -->
+    <!-- MODAL: ADD / EDIT PURE VEG DISH -->
+    <div id="dish-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 id="dish-modal-title" class="font-black text-slate-900 text-base">Add New Pure Veg Dish</h3>
+                <button onclick="closeDishModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs font-bold">
+                <input type="hidden" id="dish-id">
+                <div>
+                    <label class="block text-slate-700 mb-1">Dish Name *</label>
+                    <input type="text" id="dish-name" placeholder="e.g. Paneer Butter Masala" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1">Category *</label>
+                        <select id="dish-category" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-white font-semibold">
+                            <option value="North Indian">North Indian</option>
+                            <option value="South Indian">South Indian</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="Rice & Biryani">Rice & Biryani</option>
+                            <option value="Noodles">Noodles</option>
+                            <option value="Soups">Soups</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Desserts">Desserts</option>
+                            <option value="Special Combo">Special Combo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1">Price (₹) *</label>
+                        <input type="number" id="dish-price" placeholder="180" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-700 mb-1">Description</label>
+                    <textarea id="dish-desc" rows="2" placeholder="Rich creamy gravy with cottage cheese..." class="w-full px-3 py-2 border border-slate-300 rounded-xl"></textarea>
+                </div>
+                <div>
+                    <label class="block text-slate-700 mb-1">Image URL</label>
+                    <input type="text" id="dish-image" placeholder="https://..." class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                </div>
+                <div class="flex items-center space-x-2 pt-2">
+                    <input type="checkbox" id="dish-available" checked class="w-4 h-4 text-emerald-600 rounded">
+                    <label for="dish-available" class="text-slate-800 font-bold">Item Available for Order 🟢</label>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2 border-t border-slate-100 pt-3">
+                <button onclick="closeDishModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">Cancel</button>
+                <button onclick="saveDishItem()" class="px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl hover:bg-emerald-700">Save Item</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ORDER CANCELLATION REASON (ADMIN) -->
+    <div id="cancel-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-black text-red-900 text-base">Cancel Order Confirmation</h3>
+                <button onclick="closeCancelModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-600 font-medium">क्या आप यह Order Cancel करना चाहते हैं? Please select or specify a reason:</p>
+            
+            <input type="hidden" id="cancel-target-order-id">
+            <div class="space-y-2 text-xs font-bold">
+                <label class="flex items-center space-x-2 p-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                    <input type="radio" name="cancel-reason" value="Item Unavailable" checked class="text-red-600">
+                    <span>Item Unavailable in Kitchen</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                    <input type="radio" name="cancel-reason" value="Kitchen Overcrowded / Busy" class="text-red-600">
+                    <span>Kitchen Overcrowded / Heavy Rush</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                    <input type="radio" name="cancel-reason" value="Delivery Location Out of Reach" class="text-red-600">
+                    <span>Delivery Location Out of Reach</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                    <input type="radio" name="cancel-reason" value="Customer Request" class="text-red-600">
+                    <span>Cancelled on Customer Request</span>
+                </label>
+                <div>
+                    <label class="block text-slate-700 mb-1 mt-2">Custom Reason (Optional)</label>
+                    <input type="text" id="cancel-custom-reason" placeholder="Specify reason..." class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2 border-t border-slate-100 pt-3">
+                <button onclick="closeCancelModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">Go Back</button>
+                <button onclick="confirmOrderCancellation()" class="px-4 py-2 bg-red-600 text-white font-bold text-xs rounded-xl hover:bg-red-700">CONFIRM CANCEL 🔴</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PREPARATION TIME PICKER (ADMIN ACCEPT ORDER) -->
+    <div id="accept-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-200">
+            <div class="text-center">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-black mb-2">🟢</div>
+                <h3 class="font-black text-slate-900 text-base">Accept Order & Set Prep Time</h3>
+                <p class="text-xs text-slate-500">Estimated kitchen preparation time for customer tracking</p>
+            </div>
+            
+            <input type="hidden" id="accept-target-order-id">
+            
+            <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                <button onclick="confirmOrderAcceptance(15)" class="p-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl hover:bg-emerald-100 text-emerald-900">15 Minutes</button>
+                <button onclick="confirmOrderAcceptance(20)" class="p-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl hover:bg-emerald-100 text-emerald-900">20 Minutes</button>
+                <button onclick="confirmOrderAcceptance(30)" class="p-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl hover:bg-emerald-100 text-emerald-900">30 Minutes</button>
+                <button onclick="confirmOrderAcceptance(45)" class="p-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl hover:bg-emerald-100 text-emerald-900">45 Minutes</button>
+            </div>
+
+            <button onclick="closeAcceptModal()" class="w-full py-2 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Firebase Standard JS App Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Firebase Configuration & Variables
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'shree-malook-veg-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "demo-key",
-            authDomain: "demo-project.firebaseapp.com",
-            projectId: "demo-project",
-            storageBucket: "demo-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:demo"
-        };
+        // Global Configuration & Fallback Detection
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'shree-malook-veg';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : { apiKey: "demo-key", authDomain: "demo.firebaseapp.com", projectId: "demo-project" };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        let app, db, auth;
+        let isFirebaseOnline = false;
 
-        // Application State
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            isFirebaseOnline = true;
+        } catch (e) {
+            console.warn("Firestore initialization fallback to local reactive store:", e);
+        }
+
+        // ==========================================
+        // APPLICATION STATE & DATA MODEL
+        // ==========================================
         window.AppState = {
-            currentMode: 'customer', // 'customer' | 'admin'
-            activeTab: 'menu',      // 'home' | 'menu' | 'orders' | 'profile' | 'contact'
-            user: null,
-            adminAuthenticated: false,
+            view: 'customer-home',
+            adminTab: 'live-orders',
+            isAdminLoggedIn: false,
             audioEnabled: false,
-            alarmAudioCtx: null,
-            alarmInterval: null,
-            activeAlarmOrderId: null,
-            cart: [], // [{ id, name, price, qty }]
-            config: {
+            activeCategory: 'ALL',
+            cart: [], // [{ id, name, price, qty, image }]
+            settings: {
                 isOpen: true,
-                closedReason: 'आज Kitchen बंद है। कृपया बाद में order करें।',
-                whatsapp: '7339761118',
-                phone: '7339761118',
-                deliveryRadiusKm: 8,
-                minOrderValue: 150,
+                closedMessage: "Shree Malook Restaurant अभी बंद है। कृपया बाद में Order करें।",
+                radiusKm: 8,
+                minOrder: 150,
                 deliveryCharge: 30,
                 freeDeliveryAbove: 500,
-                prepTimeMinutes: 25
+                whatsapp: "7339761118"
             },
-            categories: [
-                "North Indian", "South Indian", "Chinese", "Snacks", "Rice & Biryani", "Noodles", "Soups", "Beverages", "Desserts", "Special Combo"
+            menuItems: [
+                { id: 'm1', name: 'Paneer Butter Masala', category: 'North Indian', price: 220, description: 'Cottage cheese cooked in rich creamy tomato gravy (Pure Veg)', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400', available: true },
+                { id: 'm2', name: 'Dal Makhani Satvik', category: 'North Indian', price: 180, description: 'Slow cooked black lentils with fresh butter & cream', image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400', available: true },
+                { id: 'm3', name: 'Special Veg Manchurian Gravy', category: 'Chinese', price: 170, description: 'Vegetable dumplings in spicy indo-chinese sauce', image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400', available: true },
+                { id: 'm4', name: 'Masala Dosa with Sambar', category: 'South Indian', price: 140, description: 'Crispy rice crepe filled with potato masala served with coconut chutney', image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400', available: true },
+                { id: 'm5', name: 'Shree Malook Special Veg Biryani', category: 'Rice & Biryani', price: 210, description: 'Aromatic basmati rice cooked with fresh veggies & whole spices', image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400', available: true },
+                { id: 'm6', name: 'Hakka Noodles Pure Veg', category: 'Noodles', price: 150, description: 'Stir fried noodles with crunchy vegetables & herbs', image: 'https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400', available: true },
+                { id: 'm7', name: 'Gulab Jamun (2 Pcs)', category: 'Desserts', price: 70, description: 'Warm soft khoya dumplings soaked in rose sugar syrup', image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=400', available: true },
+                { id: 'm8', name: 'Kulhad Sweet Lassi', category: 'Beverages', price: 60, description: 'Thick chilled sweet yogurt drink topped with malai', image: 'https://images.unsplash.com/photo-1571006682858-a458b8a69288?w=400', available: true }
             ],
-            menu: [],
-            orders: [],
-            customerProfile: {
-                name: "Gaurav Kumar",
-                phone: "9876543210",
-                address: "Flat 302, Green Valley Apartments, Station Road",
-                landmark: "Near Axis Bank ATM",
-                lat: 25.2138,
-                lng: 75.8648
-            },
-            filterCategory: 'All',
-            searchQuery: ''
+            orders: []
         };
 
-        // Firestore Paths (Strict Rule 1 Compliance)
-        const getPublicCollectionPath = (collName) => collection(db, 'artifacts', appId, 'public', 'data', collName);
-        const getPublicDocPath = (collName, docId) => doc(db, 'artifacts', appId, 'public', 'data', collName, docId);
+        let audioCtx = null;
+        let alarmInterval = null;
 
-        async function initAuthAndData() {
+        window.enableAudioAlerts = function() {
             try {
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                AppState.audioEnabled = true;
+                const btn = document.getElementById('enable-audio-btn');
+                btn.className = "px-4 py-2 bg-emerald-500 text-slate-950 text-xs font-black rounded-xl shadow flex items-center space-x-2";
+                document.getElementById('audio-btn-text').innerText = "🔔 AUDIO RING ENABLED";
+                playBeepSound(); // test sound
+            } catch (e) {
+                console.error("Audio activation error:", e);
+            }
+        };
+
+        function playBeepSound() {
+            if (!audioCtx || !AppState.audioEnabled) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
+                osc.frequency.exponentialRampToValueAtTime(1174.66, audioCtx.currentTime + 0.15); // D6 note
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch (err) {}
+        }
+
+        function checkAndPlayAlarmLoop() {
+            const hasNewOrders = AppState.orders.some(o => o.status === 'NEW');
+            const alarmBanner = document.getElementById('alarm-banner');
+            
+            if (hasNewOrders && AppState.isAdminLoggedIn) {
+                if (alarmBanner) alarmBanner.classList.remove('hidden');
+                if (!alarmInterval) {
+                    alarmInterval = setInterval(() => {
+                        playBeepSound();
+                    }, 1200);
+                }
+            } else {
+                if (alarmBanner) alarmBanner.classList.add('hidden');
+                if (alarmInterval) {
+                    clearInterval(alarmInterval);
+                    alarmInterval = null;
+                }
+            }
+        }
+
+        async function initFirestoreListeners() {
+            if (!isFirebaseOnline) return;
+
+            // Auth Sign-in
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
             } catch (err) {
-                console.warn("Auth initialization fallback to local context:", err);
+                console.warn("Auth signin error:", err);
             }
 
-            onAuthStateChanged(auth, (user) => {
-                window.AppState.user = user;
-                setupRealtimeListeners();
+            // 1. Sync Settings
+            const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'restaurant_settings', 'config');
+            onSnapshot(settingsDocRef, (snap) => {
+                if (snap.exists()) {
+                    AppState.settings = { ...AppState.settings, ...snap.data() };
+                    renderSettingsUI();
+                } else {
+                    setDoc(settingsDocRef, AppState.settings);
+                }
+            }, (err) => console.log("Settings sub err:", err));
+
+            // 2. Sync Menu Items
+            const menuColRef = collection(db, 'artifacts', appId, 'public', 'data', 'menu_items');
+            onSnapshot(menuColRef, (snap) => {
+                if (!snap.empty) {
+                    const items = [];
+                    snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+                    AppState.menuItems = items;
+                } else {
+                    // Seed initial menu into firestore
+                    AppState.menuItems.forEach(item => {
+                        setDoc(doc(menuColRef, item.id), item);
+                    });
+                }
+                renderCategoryPills();
+                renderFoodMenuGrid();
+                renderAdminMenuItems();
+            }, (err) => console.log("Menu sub err:", err));
+
+            // 3. Sync Orders
+            const ordersColRef = collection(db, 'artifacts', appId, 'public', 'data', 'orders');
+            onSnapshot(ordersColRef, (snap) => {
+                const ordersList = [];
+                snap.forEach(d => ordersList.push({ id: d.id, ...d.data() }));
+                // Sort descending by order date
+                ordersList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                AppState.orders = ordersList;
+                renderCustomerOrders();
+                renderAdminOrdersFeed();
+                updateSalesStats();
+                checkAndPlayAlarmLoop();
+            }, (err) => console.log("Orders sub err:", err));
+        }
+
+        // ==========================================
+        // RENDER & UI LOGIC FUNCTIONS
+        // ==========================================
+
+        window.renderSettingsUI = function() {
+            const isOpen = AppState.settings.isOpen;
+            
+            // Header Pill
+            const pill = document.getElementById('header-status-pill');
+            if (isOpen) {
+                pill.className = "flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+                pill.innerHTML = `<span class="w-2.5 h-2.5 rounded-full mr-1.5 bg-emerald-500 pulse-veg"></span> OPEN FOR ORDERS`;
+            } else {
+                pill.className = "flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-300";
+                pill.innerHTML = `<span class="w-2.5 h-2.5 rounded-full mr-1.5 bg-red-500"></span> RESTAURANT CLOSED`;
+            }
+
+            // Closed Banner
+            const closedBanner = document.getElementById('closed-banner');
+            if (!isOpen) {
+                closedBanner.classList.remove('hidden');
+                document.getElementById('closed-banner-message').innerText = `"${AppState.settings.closedMessage}"`;
+            } else {
+                closedBanner.classList.add('hidden');
+            }
+
+            // Admin Status Toggle Display
+            const adminStatusInd = document.getElementById('admin-status-indicator');
+            const adminStatusText = document.getElementById('admin-status-text');
+            if (adminStatusInd && adminStatusText) {
+                if (isOpen) {
+                    adminStatusInd.className = "w-5 h-5 rounded-full bg-emerald-500 pulse-veg";
+                    adminStatusText.className = "text-lg font-black text-emerald-400";
+                    adminStatusText.innerText = "🟢 RESTAURANT OPEN";
+                } else {
+                    adminStatusInd.className = "w-5 h-5 rounded-full bg-red-500";
+                    adminStatusText.className = "text-lg font-black text-red-400";
+                    adminStatusText.innerText = "🔴 RESTAURANT CLOSED";
+                }
+            }
+
+            // Update threshold labels
+            document.getElementById('checkout-radius-text').innerText = AppState.settings.radiusKm + " KM";
+            document.getElementById('checkout-min-text').innerText = "₹" + AppState.settings.minOrder;
+            document.getElementById('checkout-free-text').innerText = "₹" + AppState.settings.freeDeliveryAbove;
+            document.getElementById('checkout-fee-text').innerText = "₹" + AppState.settings.deliveryCharge;
+            document.getElementById('min-order-val').innerText = AppState.settings.minOrder;
+        };
+
+        window.renderCategoryPills = function() {
+            const categories = ['ALL', ...new Set(AppState.menuItems.map(i => i.category))];
+            const container = document.getElementById('category-pills');
+            if (!container) return;
+
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all ${
+                    AppState.activeCategory === cat 
+                        ? 'bg-emerald-600 text-white shadow-md scale-105' 
+                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                }">
+                    ${cat === 'ALL' ? '🍽️ All Veg Dishes' : cat}
+                </button>
+            `).join('');
+        };
+
+        window.setCategory = function(cat) {
+            AppState.activeCategory = cat;
+            renderCategoryPills();
+            renderFoodMenuGrid();
+        };
+
+        window.renderFoodMenuGrid = function() {
+            const container = document.getElementById('food-menu-grid');
+            if (!container) return;
+
+            const searchQuery = (document.getElementById('menu-search-input')?.value || '').toLowerCase();
+
+            const filtered = AppState.menuItems.filter(item => {
+                const matchesCategory = AppState.activeCategory === 'ALL' || item.category === AppState.activeCategory;
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
             });
-        }
 
-        // Real-time Firestore Listeners
-        function setupRealtimeListeners() {
-            // 1. Listen to Restaurant Settings / Config
-            onSnapshot(getPublicDocPath('settings', 'config'), (docSnap) => {
-                if (docSnap.exists()) {
-                    window.AppState.config = { ...window.AppState.config, ...docSnap.data() };
-                } else {
-                    // Seed initial config
-                    setDoc(getPublicDocPath('settings', 'config'), window.AppState.config);
-                }
-                renderApp();
-            }, (err) => console.error("Config Listener Error:", err));
-
-            // 2. Listen to Menu Items
-            onSnapshot(getPublicCollectionPath('menu'), (snapshot) => {
-                const items = [];
-                snapshot.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
-                if (items.length === 0) {
-                    seedDefaultMenu();
-                } else {
-                    window.AppState.menu = items;
-                    renderApp();
-                }
-            }, (err) => console.error("Menu Listener Error:", err));
-
-            // 3. Listen to Orders
-            onSnapshot(getPublicCollectionPath('orders'), (snapshot) => {
-                const orders = [];
-                let hasNewOrder = false;
-                let newOrderId = null;
-
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    orders.push({ id: doc.id, ...data });
-                    if (data.status === 'NEW') {
-                        hasNewOrder = true;
-                        newOrderId = doc.id;
-                    }
-                });
-
-                // Sort orders by newest first
-                orders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                window.AppState.orders = orders;
-
-                // Handle Audio Ring Alarm for Admin on NEW order
-                if (hasNewOrder && window.AppState.currentMode === 'admin') {
-                    triggerOrderAlarm(newOrderId);
-                } else {
-                    stopOrderAlarm();
-                }
-
-                renderApp();
-            }, (err) => console.error("Orders Listener Error:", err));
-        }
-
-        // Default Pure Veg Menu Seed
-        async function seedDefaultMenu() {
-            const seedItems = [
-                { name: "Special Shahi Paneer", category: "North Indian", price: 240, description: "Cottage cheese cubes cooked in rich cashew and tomato gravy with pure butter.", available: true, isVeg: true },
-                { name: "Dal Makhani (Desi Ghee)", category: "North Indian", price: 210, description: "Overnight slow-cooked black lentils simmered with cream and white butter.", available: true, isVeg: true },
-                { name: "Paneer Butter Masala", category: "North Indian", price: 250, description: "Rich & spicy gravy with charred paneer tikka chunks.", available: true, isVeg: true },
-                { name: "Veg Manchurian Gravy", category: "Chinese", price: 180, description: "Crispy vegetable balls tossed in dark soy, garlic and ginger sauce.", available: true, isVeg: true },
-                { name: "Hakka Noodles Special", category: "Noodles", price: 160, description: "Wok-tossed noodles with crunchy bell peppers, cabbage and spring onion.", available: true, isVeg: true },
-                { name: "Masala Dosa (Ghee Roast)", category: "South Indian", price: 140, description: "Crispy rice crepe filled with spiced potato masala, served with sambar & coconut chutney.", available: true, isVeg: true },
-                { name: "Paneer Malai Tikka", category: "Snacks", price: 260, description: "Melt-in-mouth cottage cheese marinated in cream, cardamom and yellow chili.", available: true, isVeg: true },
-                { name: "Veg Dum Biryani", category: "Rice & Biryani", price: 220, description: "Long grain Basmati rice layered with garden fresh vegetables and aromatic spices.", available: true, isVeg: true },
-                { name: "Hot & Sour Veg Soup", category: "Soups", price: 110, description: "Zesty vegetable broth spiced with chili oil and coriander.", available: true, isVeg: true },
-                { name: "Mango Lassi (Pure Milk)", category: "Beverages", price: 80, description: "Thick curd lassi infused with natural Alphonso mango pulp.", available: true, isVeg: true },
-                { name: "Butter Tandoori Roti", category: "North Indian", price: 25, description: "Whole wheat bread baked in tandoor with fresh butter layer.", available: true, isVeg: true },
-                { name: "Gulab Jamun (2 Pcs)", category: "Desserts", price: 70, description: "Warm khoya dumplings soaked in cardamom sugar syrup.", available: true, isVeg: true }
-            ];
-
-            for (const item of seedItems) {
-                await addDoc(getPublicCollectionPath('menu'), { ...item, createdAt: Date.now() });
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-400 font-medium">
+                        <i class="fa-solid fa-utensils text-4xl mb-2 text-slate-300"></i>
+                        <p>No pure veg dishes found in this category.</p>
+                    </div>
+                `;
+                return;
             }
-        }
 
-        window.toggleAudioAlarmPermission = function() {
-            if (!window.AppState.alarmAudioCtx) {
-                window.AppState.alarmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (window.AppState.alarmAudioCtx.state === 'suspended') {
-                window.AppState.alarmAudioCtx.resume();
-            }
-            window.AppState.audioEnabled = !window.AppState.audioEnabled;
-            const textEl = document.getElementById('sound-text');
-            const iconEl = document.getElementById('sound-icon');
-            if (window.AppState.audioEnabled) {
-                textEl.innerText = 'Audio Alarm Active';
-                iconEl.innerText = '🔊';
-                playTestBeep();
-            } else {
-                textEl.innerText = 'Audio Muted';
-                iconEl.innerText = '🔇';
-                stopOrderAlarm();
-            }
+            container.innerHTML = filtered.map(item => {
+                const cartQty = (AppState.cart.find(c => c.id === item.id) || {}).qty || 0;
+                const isAvailable = item.available && AppState.settings.isOpen;
+
+                return `
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="relative h-44 bg-slate-100 overflow-hidden">
+                                <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400'" class="w-full h-full object-cover">
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded-full border border-emerald-300 flex items-center space-x-1 shadow-sm">
+                                    <span class="text-xs">🟢</span> <span>PURE VEG</span>
+                                </span>
+                                ${!item.available ? `
+                                    <div class="absolute inset-0 bg-slate-950/75 flex items-center justify-center text-white font-black text-sm tracking-wider uppercase">
+                                        🔴 SOLD OUT TODAY
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <div class="p-4 space-y-1.5">
+                                <div class="flex justify-between items-start gap-2">
+                                    <h4 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">${item.name}</h4>
+                                    <span class="font-extrabold text-slate-900 text-sm sm:text-base">₹${item.price}</span>
+                                </div>
+                                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${item.description}</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 pt-0">
+                            ${!isAvailable ? `
+                                <button disabled class="w-full py-2.5 bg-slate-100 text-slate-400 text-xs font-bold rounded-xl cursor-not-allowed">
+                                    ${!AppState.settings.isOpen ? 'RESTAURANT CLOSED' : 'CURRENTLY SOLD OUT'}
+                                </button>
+                            ` : cartQty === 0 ? `
+                                <button onclick="addToCart('${item.id}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold rounded-xl shadow transition-transform active:scale-95 flex items-center justify-center space-x-1">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                    <span>ADD TO CART</span>
+                                </button>
+                            ` : `
+                                <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl p-1">
+                                    <button onclick="updateCartQty('${item.id}', -1)" class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow">-</button>
+                                    <span class="font-extrabold text-emerald-950 text-sm px-2">${cartQty} in Cart</span>
+                                    <button onclick="updateCartQty('${item.id}', 1)" class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow">+</button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         };
 
-        function playTestBeep() {
-            if (!window.AppState.alarmAudioCtx) return;
-            const osc = window.AppState.alarmAudioCtx.createOscillator();
-            const gain = window.AppState.alarmAudioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(880, window.AppState.alarmAudioCtx.currentTime);
-            gain.gain.setValueAtTime(0.1, window.AppState.alarmAudioCtx.currentTime);
-            osc.connect(gain);
-            gain.connect(window.AppState.alarmAudioCtx.destination);
-            osc.start();
-            osc.stop(window.AppState.alarmAudioCtx.currentTime + 0.15);
-        }
-
-        function triggerOrderAlarm(orderId) {
-            window.AppState.activeAlarmOrderId = orderId;
-            if (!window.AppState.audioEnabled) return;
-            if (window.AppState.alarmInterval) return; // already ringing
-
-            window.AppState.alarmInterval = setInterval(() => {
-                if (!window.AppState.audioEnabled || !window.AppState.activeAlarmOrderId) {
-                    stopOrderAlarm();
-                    return;
-                }
-                try {
-                    const ctx = window.AppState.alarmAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
-                    window.AppState.alarmAudioCtx = ctx;
-                    if (ctx.state === 'suspended') ctx.resume();
-
-                    const now = ctx.currentTime;
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'square';
-                    // High pitch siren effect for restaurant alert
-                    osc.frequency.setValueAtTime(750, now);
-                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
-                    gain.gain.setValueAtTime(0.3, now);
-                    gain.gain.linearRampToValueAtTime(0, now + 0.4);
-
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.4);
-                } catch (e) {
-                    console.error("Audio error", e);
-                }
-            }, 800);
-        }
-
-        function stopOrderAlarm() {
-            window.AppState.activeAlarmOrderId = null;
-            if (window.AppState.alarmInterval) {
-                clearInterval(window.AppState.alarmInterval);
-                window.AppState.alarmInterval = null;
-            }
-        }
-
-        window.switchViewMode = function(mode) {
-            window.AppState.currentMode = mode;
-            const custBtn = document.getElementById('nav-mode-customer');
-            const admBtn = document.getElementById('nav-mode-admin');
-            if (mode === 'customer') {
-                custBtn.className = "px-3 py-1 rounded text-xs font-semibold bg-veg-600 text-white transition";
-                admBtn.className = "px-3 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white transition";
-            } else {
-                admBtn.className = "px-3 py-1 rounded text-xs font-semibold bg-amber-600 text-white transition";
-                custBtn.className = "px-3 py-1 rounded text-xs font-semibold text-slate-400 hover:text-white transition";
-            }
-            renderApp();
+        window.filterMenu = function() {
+            renderFoodMenuGrid();
         };
 
-        window.setCustomerTab = function(tab) {
-            window.AppState.activeTab = tab;
-            renderApp();
-        };
-
-        window.setFilterCategory = function(cat) {
-            window.AppState.filterCategory = cat;
-            renderApp();
-        };
-
-        window.handleSearch = function(val) {
-            window.AppState.searchQuery = val.toLowerCase();
-            renderApp();
-        };
-
-        // Cart Actions
         window.addToCart = function(itemId) {
-            const item = window.AppState.menu.find(m => m.id === itemId);
-            if (!item || !item.available) return;
-            const existing = window.AppState.cart.find(c => c.id === itemId);
-            if (existing) {
-                existing.qty += 1;
-            } else {
-                window.AppState.cart.push({ id: item.id, name: item.name, price: item.price, qty: 1 });
+            if (!AppState.settings.isOpen) {
+                alert("Shree Malook Restaurant अभी बंद है। Order स्वीकार नहीं किए जा रहे हैं।");
+                return;
             }
-            renderApp();
+            const item = AppState.menuItems.find(i => i.id === itemId);
+            if (!item || !item.available) return;
+
+            const existing = AppState.cart.find(c => c.id === itemId);
+            if (existing) {
+                existing.qty++;
+            } else {
+                AppState.cart.push({ id: item.id, name: item.name, price: item.price, qty: 1, image: item.image });
+            }
+            renderFoodMenuGrid();
+            updateCartSummaryUI();
         };
 
         window.updateCartQty = function(itemId, delta) {
-            const idx = window.AppState.cart.findIndex(c => c.id === itemId);
-            if (idx > -1) {
-                window.AppState.cart[idx].qty += delta;
-                if (window.AppState.cart[idx].qty <= 0) {
-                    window.AppState.cart.splice(idx, 1);
+            const index = AppState.cart.findIndex(c => c.id === itemId);
+            if (index !== -1) {
+                AppState.cart[index].qty += delta;
+                if (AppState.cart[index].qty <= 0) {
+                    AppState.cart.splice(index, 1);
                 }
             }
-            renderApp();
+            renderFoodMenuGrid();
+            updateCartSummaryUI();
         };
 
-        // Admin Actions
-        window.toggleRestaurantMasterStatus = async function() {
-            const newStatus = !window.AppState.config.isOpen;
-            try {
-                await setDoc(getPublicDocPath('settings', 'config'), {
-                    ...window.AppState.config,
-                    isOpen: newStatus
-                }, { merge: true });
-            } catch(e) {
-                alert("Could not update restaurant status. Check connection.");
+        function updateCartSummaryUI() {
+            const totalQty = AppState.cart.reduce((sum, item) => sum + item.qty, 0);
+            
+            // Recalculate price strictly from system menu database
+            let subtotal = 0;
+            AppState.cart.forEach(cartItem => {
+                const dbItem = AppState.menuItems.find(i => i.id === cartItem.id);
+                if (dbItem) subtotal += dbItem.price * cartItem.qty;
+            });
+
+            // Delivery charge calculation logic
+            let deliveryFee = AppState.settings.deliveryCharge;
+            if (subtotal >= AppState.settings.freeDeliveryAbove || subtotal === 0) {
+                deliveryFee = 0;
             }
-        };
+            const grandTotal = subtotal === 0 ? 0 : subtotal + deliveryFee;
 
-        window.updateClosedReasonMessage = async function() {
-            const msg = prompt("Enter closure message for customers:", window.AppState.config.closedReason);
-            if (msg !== null) {
-                await setDoc(getPublicDocPath('settings', 'config'), {
-                    ...window.AppState.config,
-                    closedReason: msg
-                }, { merge: true });
+            // Update Sticky Bar
+            const stickyBar = document.getElementById('sticky-cart-bar');
+            if (totalQty > 0) {
+                stickyBar.classList.remove('translate-y-full');
+                document.getElementById('sticky-cart-count').innerText = totalQty;
+                document.getElementById('sticky-cart-total').innerText = "₹" + grandTotal;
+            } else {
+                stickyBar.classList.add('translate-y-full');
             }
-        };
 
-        window.toggleMenuItemAvailability = async function(itemId, currentStatus) {
-            try {
-                await updateDoc(getPublicDocPath('menu', itemId), {
-                    available: !currentStatus
-                });
-            } catch (e) {
-                console.error("Error toggling menu item:", e);
+            // Update Cart Items List in Checkout View
+            const summaryContainer = document.getElementById('cart-summary-items');
+            if (summaryContainer) {
+                if (AppState.cart.length === 0) {
+                    summaryContainer.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Your cart is empty.</p>`;
+                } else {
+                    summaryContainer.innerHTML = AppState.cart.map(item => `
+                        <div class="py-2.5 flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-emerald-600 font-bold">🟢</span>
+                                <div>
+                                    <div class="font-bold text-slate-800">${item.name}</div>
+                                    <div class="text-[10px] text-slate-500">₹${item.price} x ${item.qty}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-black text-slate-900">₹${item.price * item.qty}</span>
+                                <button onclick="updateCartQty('${item.id}', -1)" class="text-slate-400 hover:text-red-500 px-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
             }
-        };
 
-        window.openAddMenuItemModal = function() {
-            const name = prompt("Enter Veg Dish Name:");
-            if (!name) return;
-            const price = parseFloat(prompt("Enter Price (₹):", "180"));
-            if (isNaN(price)) return;
-            const category = prompt(`Enter Category (${window.AppState.categories.join(', ')}):`, "North Indian");
-            const description = prompt("Enter Description:", "Fresh veg delicacy cooked in pure butter.");
+            document.getElementById('bill-subtotal').innerText = "₹" + subtotal;
+            document.getElementById('bill-delivery').innerText = deliveryFee === 0 ? "FREE" : "₹" + deliveryFee;
+            document.getElementById('bill-grandtotal').innerText = "₹" + grandTotal;
 
-            addDoc(getPublicCollectionPath('menu'), {
-                name,
-                price,
-                category: category || "Special Items",
-                description: description || "Authentic 100% Pure Veg Dish",
-                available: true,
-                isVeg: true,
-                createdAt: Date.now()
+            const freeQualify = document.getElementById('free-delivery-qualify');
+            if (subtotal >= AppState.settings.freeDeliveryAbove && subtotal > 0) {
+                freeQualify.classList.remove('hidden');
+            } else {
+                freeQualify.classList.add('hidden');
+            }
+
+            // Minimum order alert trigger
+            const minAlert = document.getElementById('min-order-alert');
+            const placeBtn = document.getElementById('place-order-btn');
+            if (subtotal > 0 && subtotal < AppState.settings.minOrder) {
+                minAlert.classList.remove('hidden');
+                placeBtn.disabled = true;
+                placeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                minAlert.classList.add('hidden');
+                placeBtn.disabled = false;
+                placeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        window.detectGPSLocation = function() {
+            if (!navigator.geolocation) {
+                alert("Geolocation is not supported by your browser");
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(pos => {
+                document.getElementById('cust-lat').value = pos.coords.latitude;
+                document.getElementById('cust-lng').value = pos.coords.longitude;
+                document.getElementById('gps-status-badge').classList.remove('hidden');
+            }, err => {
+                alert("Unable to fetch location automatically. Please enter full street address manually.");
             });
         };
 
-        window.deleteMenuItem = async function(itemId) {
-            if (confirm("Are you sure you want to delete this dish from the menu?")) {
-                const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
-                await deleteDoc(getPublicDocPath('menu', itemId));
+        window.submitCustomerOrder = async function() {
+            // 1. Verify Restaurant Status
+            if (!AppState.settings.isOpen) {
+                alert(AppState.settings.closedMessage);
+                return;
             }
-        };
 
-        // Order Workflow (Admin)
-        window.acceptOrderPrompt = function(orderId) {
-            stopOrderAlarm();
-            const modalHtml = `
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-                    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-slate-800 shadow-2xl">
-                        <h3 class="text-xl font-bold text-slate-900 mb-2">🟢 Accept Order</h3>
-                        <p class="text-sm text-slate-600 mb-4">Select estimated kitchen preparation time for the customer:</p>
-                        <div class="grid grid-cols-2 gap-2 mb-4">
-                            <button onclick="confirmAcceptOrder('${orderId}', 15)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 py-3 rounded-xl font-bold">15 Mins</button>
-                            <button onclick="confirmAcceptOrder('${orderId}', 25)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 py-3 rounded-xl font-bold">25 Mins</button>
-                            <button onclick="confirmAcceptOrder('${orderId}', 35)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 py-3 rounded-xl font-bold">35 Mins</button>
-                            <button onclick="confirmAcceptOrder('${orderId}', 45)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 py-3 rounded-xl font-bold">45 Mins</button>
-                        </div>
-                        <button onclick="closeModal()" class="w-full bg-slate-200 text-slate-700 py-2.5 rounded-xl font-semibold">Cancel</button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('modals-container').innerHTML = modalHtml;
-        };
-
-        window.confirmAcceptOrder = async function(orderId, prepTime) {
-            closeModal();
-            try {
-                await updateDoc(getPublicDocPath('orders', orderId), {
-                    status: 'ACCEPTED',
-                    prepTimeMinutes: prepTime,
-                    acceptedAt: Date.now()
-                });
-            } catch (e) {
-                alert("Failed to update order status.");
+            if (AppState.cart.length === 0) {
+                alert("Your cart is empty! Please add items from menu.");
+                return;
             }
-        };
 
-        window.cancelOrderPrompt = function(orderId) {
-            stopOrderAlarm();
-            const modalHtml = `
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-                    <div class="bg-white rounded-2xl p-6 max-w-md w-full text-slate-800 shadow-2xl">
-                        <h3 class="text-xl font-bold text-red-600 mb-1">🔴 Cancel Order</h3>
-                        <p class="text-sm font-medium text-slate-700 mb-4">क्या आप यह order cancel करना चाहते हैं?</p>
-                        <p class="text-xs text-slate-500 mb-2">Select cancellation reason:</p>
-                        <div class="space-y-2 mb-4">
-                            <button onclick="confirmCancelOrder('${orderId}', 'Item unavailable / Out of Stock')" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-300 text-sm font-medium text-slate-700">❌ Item unavailable / Out of Stock</button>
-                            <button onclick="confirmCancelOrder('${orderId}', 'Kitchen too busy / Peak Hour')" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-300 text-sm font-medium text-slate-700">👨‍🍳 Kitchen too busy</button>
-                            <button onclick="confirmCancelOrder('${orderId}', 'Delivery area issue / Staff unavailable')" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-300 text-sm font-medium text-slate-700">🛵 Delivery partner unavailable</button>
-                            <button onclick="confirmCancelOrder('${orderId}', 'Customer requested cancellation')" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-300 text-sm font-medium text-slate-700">📞 Customer request</button>
-                        </div>
-                        <button onclick="closeModal()" class="w-full bg-slate-200 text-slate-700 py-2.5 rounded-xl font-semibold">Back</button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('modals-container').innerHTML = modalHtml;
-        };
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const landmark = document.getElementById('cust-landmark').value.trim();
+            const notes = document.getElementById('cust-notes').value.trim();
+            const lat = document.getElementById('cust-lat').value;
+            const lng = document.getElementById('cust-lng').value;
 
-        window.confirmCancelOrder = async function(orderId, reason) {
-            closeModal();
-            try {
-                await updateDoc(getPublicDocPath('orders', orderId), {
-                    status: 'CANCELLED',
-                    cancelReason: reason,
-                    cancelledAt: Date.now()
-                });
-            } catch (e) {
-                alert("Failed to update order cancellation.");
+            if (!name || !phone || !address) {
+                alert("Please fill in your Name, Phone Number, and Full Delivery Address.");
+                return;
             }
-        };
 
-        window.updateOrderStatus = async function(orderId, nextStatus) {
-            try {
-                const updateData = { status: nextStatus };
-                if (nextStatus === 'OUT_FOR_DELIVERY') {
-                    const driverName = prompt("Enter Delivery Boy Name:", "Ramesh Kumar");
-                    const driverPhone = prompt("Enter Delivery Boy Phone:", "9876543210");
-                    if (driverName) updateData.driverName = driverName;
-                    if (driverPhone) updateData.driverPhone = driverPhone;
+            // 2. SERVER-SIDE / STRICT PRICE VERIFICATION
+            let verifiedSubtotal = 0;
+            const verifiedOrderItems = [];
+
+            for (const cartItem of AppState.cart) {
+                const menuItem = AppState.menuItems.find(i => i.id === cartItem.id);
+                if (!menuItem || !menuItem.available) {
+                    alert(`Sorry, item "${cartItem.name}" is currently unavailable or sold out.`);
+                    return;
                 }
-                if (nextStatus === 'DELIVERED') {
-                    updateData.paymentStatus = 'Paid';
-                    updateData.deliveredAt = Date.now();
-                }
-                await updateDoc(getPublicDocPath('orders', orderId), updateData);
-            } catch(e) {
-                console.error("Failed status update:", e);
-            }
-        };
-
-        // Checkout Modal & Placement
-        window.openCheckoutModal = function() {
-            if (window.AppState.cart.length === 0) {
-                alert("Your cart is empty! Add delicious Pure Veg dishes first.");
-                return;
-            }
-            if (!window.AppState.config.isOpen) {
-                alert("Shree Malook Restaurant is currently CLOSED for new orders.");
-                return;
-            }
-
-            const subtotal = window.AppState.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const isFreeDelivery = subtotal >= window.AppState.config.freeDeliveryAbove;
-            const deliveryCharge = isFreeDelivery ? 0 : window.AppState.config.deliveryCharge;
-            const grandTotal = subtotal + deliveryCharge;
-
-            const modalHtml = `
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-3 z-50 overflow-y-auto">
-                    <div class="bg-white rounded-2xl max-w-lg w-full p-5 text-slate-800 shadow-2xl my-8">
-                        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                            <div>
-                                <h3 class="text-xl font-extrabold text-slate-900">Checkout</h3>
-                                <p class="text-xs text-veg-700 font-bold">🟢 100% Pure Vegetarian Preparation</p>
-                            </div>
-                            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1">✕</button>
-                        </div>
-
-                        <!-- Delivery Location Check -->
-                        <form id="checkout-form" onsubmit="handlePlaceOrder(event)" class="space-y-4 mt-4">
-                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex justify-between items-center">
-                                <div>
-                                    <span class="font-bold block">📍 Delivery Radius Check</span>
-                                    <span>Cloud Kitchen Delivery within <strong>${window.AppState.config.deliveryRadiusKm} KM</strong></span>
-                                </div>
-                                <button type="button" onclick="verifyGPSLocation()" class="bg-amber-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold shadow">
-                                    Use GPS
-                                </button>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Customer Name *</label>
-                                    <input type="text" id="cust-name" required value="${window.AppState.customerProfile.name}" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-veg-500 outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Mobile Number *</label>
-                                    <input type="tel" id="cust-phone" required pattern="[0-9]{10}" value="${window.AppState.customerProfile.phone}" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-veg-500 outline-none">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1">Full Delivery Address *</label>
-                                <textarea id="cust-address" required rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-veg-500 outline-none">${window.AppState.customerProfile.address}</textarea>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Nearby Landmark *</label>
-                                    <input type="text" id="cust-landmark" required value="${window.AppState.customerProfile.landmark}" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-veg-500 outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Payment Method *</label>
-                                    <select id="cust-payment" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-veg-500 outline-none font-medium">
-                                        <option value="COD">Cash on Delivery (COD)</option>
-                                        <option value="ONLINE">UPI / Online Gateway</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1">Cooking Instructions / Notes (Optional)</label>
-                                <input type="text" id="cust-notes" placeholder="e.g. Make it spicy, less oil, send extra chutney" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm outline-none">
-                            </div>
-
-                            <!-- Bill Details -->
-                            <div class="bg-slate-50 rounded-xl p-3 space-y-1.5 text-xs text-slate-600 border border-slate-200">
-                                <div class="flex justify-between">
-                                    <span>Food Subtotal</span>
-                                    <span class="font-bold text-slate-800">₹${subtotal}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Delivery Charge (${isFreeDelivery ? 'Free Delivery Promo' : 'Standard'})</span>
-                                    <span class="font-bold ${isFreeDelivery ? 'text-veg-600' : 'text-slate-800'}">${isFreeDelivery ? 'FREE' : '₹' + deliveryCharge}</span>
-                                </div>
-                                ${subtotal < window.AppState.config.freeDeliveryAbove ? `
-                                    <p class="text-[10px] text-amber-700">Add ₹${window.AppState.config.freeDeliveryAbove - subtotal} more for FREE Delivery!</p>
-                                ` : ''}
-                                <div class="flex justify-between text-sm font-extrabold text-slate-900 pt-2 border-t border-slate-200">
-                                    <span>To Pay</span>
-                                    <span class="text-veg-700">₹${grandTotal}</span>
-                                </div>
-                            </div>
-
-                            <button type="submit" id="btn-place-order" class="w-full bg-veg-600 hover:bg-veg-700 active:scale-[0.99] text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex justify-center items-center gap-2">
-                                <span>PLACE ORDER NOW</span>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            `;
-            document.getElementById('modals-container').innerHTML = modalHtml;
-        };
-
-        window.verifyGPSLocation = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    alert(`✅ GPS Location Verified!\nLatitude: ${pos.coords.latitude.toFixed(4)}, Longitude: ${pos.coords.longitude.toFixed(4)}\nYou are within Shree Malook's delivery zone.`);
-                }, () => {
-                    alert("📍 Defaulting to Kota City Cloud Kitchen delivery zone.");
+                verifiedSubtotal += menuItem.price * cartItem.qty;
+                verifiedOrderItems.push({
+                    id: menuItem.id,
+                    name: menuItem.name,
+                    price: menuItem.price,
+                    qty: cartItem.qty,
+                    subtotal: menuItem.price * cartItem.qty
                 });
-            } else {
-                alert("Geolocation not supported by browser.");
             }
-        };
 
-        window.handlePlaceOrder = async function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-place-order');
-            btn.disabled = true;
-            btn.innerText = "Saving Order...";
-
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const address = document.getElementById('cust-address').value;
-            const landmark = document.getElementById('cust-landmark').value;
-            const paymentMethod = document.getElementById('cust-payment').value;
-            const notes = document.getElementById('cust-notes').value;
-
-            // Server-side / Logic validation calculation
-            const items = window.AppState.cart.map(c => ({
-                id: c.id,
-                name: c.name,
-                price: c.price,
-                qty: c.qty
-            }));
-
-            const subtotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            if (subtotal < window.AppState.config.minOrderValue) {
-                alert(`Minimum order value is ₹${window.AppState.config.minOrderValue}. Please add more items.`);
-                btn.disabled = false;
-                btn.innerText = "PLACE ORDER NOW";
+            if (verifiedSubtotal < AppState.settings.minOrder) {
+                alert(`Minimum order value is ₹${AppState.settings.minOrder}. Subtotal is ₹${verifiedSubtotal}`);
                 return;
             }
 
-            const isFree = subtotal >= window.AppState.config.freeDeliveryAbove;
-            const deliveryCharge = isFree ? 0 : window.AppState.config.deliveryCharge;
-            const total = subtotal + deliveryCharge;
+            const deliveryCharge = verifiedSubtotal >= AppState.settings.freeDeliveryAbove ? 0 : AppState.settings.deliveryCharge;
+            const verifiedGrandTotal = verifiedSubtotal + deliveryCharge;
 
-            const orderPayload = {
-                orderId: 'SMR-' + Math.floor(100000 + Math.random() * 900000),
+            const orderId = 'SM' + Math.floor(100000 + Math.random() * 900000);
+            const newOrderObj = {
+                orderId: orderId,
+                createdAt: Date.now(),
+                status: 'NEW',
                 customerName: name,
                 customerPhone: phone,
                 address: address,
                 landmark: landmark,
-                paymentMethod: paymentMethod,
-                paymentStatus: paymentMethod === 'ONLINE' ? 'Paid' : 'Unpaid (COD)',
-                notes: notes || '',
-                items: items,
-                subtotal: subtotal,
+                notes: notes,
+                coords: { lat: lat, lng: lng },
+                items: verifiedOrderItems,
+                subtotal: verifiedSubtotal,
                 deliveryCharge: deliveryCharge,
-                total: total,
-                status: 'NEW',
-                createdAt: Date.now()
+                grandTotal: verifiedGrandTotal,
+                paymentMethod: 'COD',
+                paymentStatus: 'UNPAID',
+                prepTimeMinutes: null,
+                cancelledReason: null
             };
 
-            try {
-                await addDoc(getPublicCollectionPath('orders'), orderPayload);
-                // Clear cart
-                window.AppState.cart = [];
-                closeModal();
-                window.AppState.activeTab = 'orders';
-                renderApp();
-            } catch (err) {
-                alert("Order creation failed. Please try again.");
-                btn.disabled = false;
-                btn.innerText = "PLACE ORDER NOW";
+            // Save to Firestore / App State
+            if (isFirebaseOnline) {
+                const ordersColRef = collection(db, 'artifacts', appId, 'public', 'data', 'orders');
+                await setDoc(doc(ordersColRef, orderId), newOrderObj);
+            } else {
+                AppState.orders.unshift(newOrderObj);
             }
+
+            // Clear Cart & Navigate
+            AppState.cart = [];
+            updateCartSummaryUI();
+            renderFoodMenuGrid();
+            switchView('customer-orders');
+            alert(`🎉 ORDER PLACED SUCCESSFULLY!\n\nOrder ID: #${orderId}\nTotal: ₹${verifiedGrandTotal}\n\nOur kitchen has received your order and is now reviewing it!`);
         };
 
-        window.closeModal = function() {
-            document.getElementById('modals-container').innerHTML = '';
-        };
+        window.renderCustomerOrders = function() {
+            const container = document.getElementById('customer-orders-container');
+            if (!container) return;
 
-        function renderApp() {
-            const main = document.getElementById('main-content');
-            const statusBanner = document.getElementById('customer-status-banner');
-
-            // Render Restaurant Status Bar for Customer
-            if (window.AppState.currentMode === 'customer') {
-                statusBanner.classList.remove('hidden');
-                if (window.AppState.config.isOpen) {
-                    statusBanner.innerHTML = `
-                        <div class="bg-emerald-600 text-white py-2 px-4 text-center text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 shadow-inner">
-                            <span class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
-                            <span>🟢 RESTAURANT IS OPEN — ACCEPTING DELIVERIES NOW!</span>
-                        </div>
-                    `;
-                } else {
-                    statusBanner.innerHTML = `
-                        <div class="bg-red-600 text-white py-2.5 px-4 text-center text-xs sm:text-sm font-bold shadow-inner">
-                            🔴 RESTAURANT CLOSED — ${window.AppState.config.closedReason}
-                        </div>
-                    `;
-                }
-            } else {
-                statusBanner.classList.add('hidden');
-            }
-
-            // Update Sticky Cart Visibility
-            const stickyCart = document.getElementById('sticky-mobile-cart');
-            const totalCartItems = window.AppState.cart.reduce((s, i) => s + i.qty, 0);
-            const totalCartPrice = window.AppState.cart.reduce((s, i) => s + (i.price * i.qty), 0);
-            if (window.AppState.currentMode === 'customer' && totalCartItems > 0) {
-                stickyCart.classList.remove('hidden');
-                document.getElementById('sticky-cart-count').innerText = totalCartItems;
-                document.getElementById('sticky-cart-total').innerText = '₹' + totalCartPrice;
-            } else {
-                stickyCart.classList.add('hidden');
-            }
-
-            // Dispatch render based on view mode
-            if (window.AppState.currentMode === 'customer') {
-                main.innerHTML = renderCustomerView();
-            } else {
-                main.innerHTML = renderAdminView();
-            }
-        }
-
-        /* CUSTOMER VIEW TEMPLATE */
-        function renderCustomerView() {
-            return `
-                <!-- CUSTOMER HERO BANNER -->
-                <div class="bg-gradient-to-br from-slate-900 via-veg-950 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl mb-6 relative overflow-hidden border border-veg-800/40">
-                    <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-veg-500/10 rounded-full blur-3xl"></div>
-                    <div class="relative z-10 max-w-2xl">
-                        <div class="inline-flex items-center space-x-2 bg-veg-900/80 border border-veg-500/40 px-3 py-1 rounded-full mb-3 text-xs text-veg-300 font-semibold tracking-wide">
-                            <span class="w-2 h-2 rounded-full bg-veg-400"></span>
-                            <span>100% PURE VEGETARIAN • CLOUD KITCHEN</span>
-                        </div>
-                        <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-2 text-white">
-                            SHREE MALOOK <span class="text-saffron-400">RESTAURANT</span>
-                        </h1>
-                        <p class="text-slate-300 text-sm sm:text-base mb-6 font-medium">
-                            Authentic North & South Indian, Chinese & Tandoori Delicacies. Freshly Prepared & Delivered Fast to Your Doorstep.
-                        </p>
-                        
-                        <!-- Search & Quick Navigation -->
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <div class="relative flex-1">
-                                <input type="text" oninput="handleSearch(this.value)" placeholder="Search Paneer, Manchurian, Dosa..." value="${window.AppState.searchQuery}" class="w-full bg-slate-800/90 text-white placeholder-slate-400 pl-10 pr-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-veg-500 text-sm">
-                                <svg class="w-5 h-5 text-slate-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <a href="https://wa.me/91${window.AppState.config.whatsapp}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-2 shadow">
-                                    <span>💬 WhatsApp</span>
-                                </a>
-                                <a href="tel:${window.AppState.config.phone}" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-3 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
-                                    <span>📞 Call Us</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CUSTOMER SUB NAV TABS -->
-                <div class="flex border-b border-slate-200 mb-6 space-x-6 overflow-x-auto hide-scrollbar">
-                    <button onclick="setCustomerTab('menu')" class="py-3 px-1 text-sm font-bold border-b-2 whitespace-nowrap transition ${window.AppState.activeTab === 'menu' ? 'border-veg-600 text-veg-700' : 'border-transparent text-slate-500 hover:text-slate-700'}">
-                        🍽️ Pure Veg Menu
-                    </button>
-                    <button onclick="setCustomerTab('orders')" class="py-3 px-1 text-sm font-bold border-b-2 whitespace-nowrap transition ${window.AppState.activeTab === 'orders' ? 'border-veg-600 text-veg-700' : 'border-transparent text-slate-500 hover:text-slate-700'}">
-                        📦 Live Orders & Track (${window.AppState.orders.length})
-                    </button>
-                    <button onclick="setCustomerTab('profile')" class="py-3 px-1 text-sm font-bold border-b-2 whitespace-nowrap transition ${window.AppState.activeTab === 'profile' ? 'border-veg-600 text-veg-700' : 'border-transparent text-slate-500 hover:text-slate-700'}">
-                        👤 My Profile & Info
-                    </button>
-                </div>
-
-                ${renderCustomerTabContent()}
-            `;
-        }
-
-        function renderCustomerTabContent() {
-            if (window.AppState.activeTab === 'orders') {
-                return renderCustomerOrdersView();
-            }
-            if (window.AppState.activeTab === 'profile') {
-                return renderCustomerProfileView();
-            }
-
-            // MENU TAB
-            let filteredMenu = window.AppState.menu;
-            if (window.AppState.filterCategory !== 'All') {
-                filteredMenu = filteredMenu.filter(m => m.category === window.AppState.filterCategory);
-            }
-            if (window.AppState.searchQuery) {
-                filteredMenu = filteredMenu.filter(m => m.name.toLowerCase().includes(window.AppState.searchQuery) || m.category.toLowerCase().includes(window.AppState.searchQuery));
-            }
-
-            return `
-                <!-- CATEGORY PILLS FILTER -->
-                <div class="mb-6">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Explore Categories</h3>
-                    <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
-                        <button onclick="setFilterCategory('All')" class="px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition ${window.AppState.filterCategory === 'All' ? 'bg-veg-700 text-white shadow' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}">
-                            All Items
-                        </button>
-                        ${window.AppState.categories.map(cat => `
-                            <button onclick="setFilterCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition ${window.AppState.filterCategory === cat ? 'bg-veg-700 text-white shadow' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}">
-                                ${cat}
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <!-- MENU DISHES GRID -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    ${filteredMenu.length === 0 ? `
-                        <div class="col-span-full text-center py-12 bg-white rounded-2xl border border-slate-200">
-                            <p class="text-4xl mb-2">🥗</p>
-                            <p class="text-slate-600 font-bold">No dishes found matching your selection.</p>
-                        </div>
-                    ` : filteredMenu.map(item => {
-                        const cartItem = window.AppState.cart.find(c => c.id === item.id);
-                        return `
-                            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
-                                <div>
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div class="flex items-center space-x-1.5 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded text-[10px] font-bold text-emerald-800">
-                                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-600"></span>
-                                            <span>🟢 VEG</span>
-                                        </div>
-                                        <span class="text-xs font-semibold px-2 py-0.5 rounded ${item.available ? 'bg-slate-100 text-slate-600' : 'bg-red-100 text-red-700 font-bold'}">
-                                            ${item.available ? item.category : '🔴 SOLD OUT'}
-                                        </span>
-                                    </div>
-                                    <h4 class="text-base font-extrabold text-slate-900 mb-1">${item.name}</h4>
-                                    <p class="text-xs text-slate-500 mb-3 line-clamp-2">${item.description}</p>
-                                </div>
-
-                                <div class="flex items-center justify-between pt-3 border-t border-slate-100 mt-2">
-                                    <span class="text-lg font-black text-slate-900">₹${item.price}</span>
-                                    
-                                    ${!item.available ? `
-                                        <button disabled class="bg-slate-100 text-slate-400 px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">
-                                            Unavailable
-                                        </button>
-                                    ` : cartItem ? `
-                                        <div class="flex items-center bg-veg-700 text-white rounded-xl overflow-hidden shadow">
-                                            <button onclick="updateCartQty('${item.id}', -1)" class="px-3 py-1.5 font-bold hover:bg-veg-800 transition">-</button>
-                                            <span class="px-3 py-1.5 text-xs font-black">${cartItem.qty}</span>
-                                            <button onclick="updateCartQty('${item.id}', 1)" class="px-3 py-1.5 font-bold hover:bg-veg-800 transition">+</button>
-                                        </div>
-                                    ` : `
-                                        <button onclick="addToCart('${item.id}')" class="bg-veg-600 hover:bg-veg-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow transition flex items-center space-x-1">
-                                            <span>ADD</span>
-                                            <span>+</span>
-                                        </button>
-                                    `}
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-        }
-
-        /* CUSTOMER LIVE ORDER TRACKING VIEW */
-        function renderCustomerOrdersView() {
-            if (window.AppState.orders.length === 0) {
-                return `
-                    <div class="bg-white rounded-3xl p-10 text-center border border-slate-200 max-w-md mx-auto">
-                        <div class="text-5xl mb-3">🛍️</div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-1">No Orders Yet</h3>
-                        <p class="text-xs text-slate-500 mb-4">You haven't placed any delicious Pure Veg orders today.</p>
-                        <button onclick="setCustomerTab('menu')" class="bg-veg-600 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow">Explore Menu</button>
+            if (AppState.orders.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center text-slate-500">
+                        <i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i>
+                        <p class="font-bold text-sm">No recent orders found.</p>
                     </div>
                 `;
+                return;
             }
 
-            return `
-                <div class="space-y-6 max-w-3xl mx-auto">
-                    <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
-                        <span>📦 Live Order Status</span>
-                        <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold">Real-time Updates</span>
-                    </h3>
+            const statusSteps = ['NEW', 'ACCEPTED', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY', 'DELIVERED'];
 
-                    ${window.AppState.orders.map(order => {
-                        const statusSteps = [
-                            { key: 'NEW', label: 'Order Sent' },
-                            { key: 'ACCEPTED', label: 'Accepted' },
-                            { key: 'PREPARING', label: 'Chef Preparing' },
-                            { key: 'READY', label: 'Ready' },
-                            { key: 'OUT_FOR_DELIVERY', label: 'Out for Delivery' },
-                            { key: 'DELIVERED', label: 'Delivered' }
-                        ];
+            container.innerHTML = AppState.orders.map(order => {
+                const isCancelled = order.status === 'CANCELLED';
+                const currentStepIdx = statusSteps.indexOf(order.status);
 
-                        const isCancelled = order.status === 'CANCELLED';
-                        const currentStepIdx = statusSteps.findIndex(s => s.key === order.status);
-
-                        return `
-                            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-                                <div class="flex flex-wrap justify-between items-start gap-2 border-b border-slate-100 pb-3">
-                                    <div>
-                                        <span class="text-xs font-bold text-slate-400">Order #${order.orderId}</span>
-                                        <h4 class="text-base font-extrabold text-slate-900">${order.customerName}</h4>
-                                        <p class="text-xs text-slate-500">${new Date(order.createdAt).toLocaleTimeString()} • ${order.paymentMethod} (${order.paymentStatus})</p>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="text-lg font-black text-veg-700">₹${order.total}</span>
-                                        <p class="text-xs font-bold text-slate-500">${order.items.length} items</p>
-                                    </div>
-                                </div>
-
-                                <!-- TRACKING PROGRESS TIMELINE -->
-                                ${isCancelled ? `
-                                    <div class="bg-red-50 border border-red-200 rounded-2xl p-4 text-xs text-red-800 space-y-1">
-                                        <p class="font-extrabold text-sm flex items-center gap-1">🔴 ORDER CANCELLED BY RESTAURANT</p>
-                                        <p><strong>Reason:</strong> ${order.cancelReason || 'Kitchen temporarily unavailable'}</p>
-                                    </div>
-                                ` : `
-                                    <div class="py-2">
-                                        <p class="text-xs font-bold text-slate-600 mb-3">Est. Delivery Time: <span class="text-veg-700 font-extrabold">${order.prepTimeMinutes ? order.prepTimeMinutes + ' Mins' : '15-30 Mins'}</span></p>
-                                        <div class="grid grid-cols-6 gap-1 text-center">
-                                            ${statusSteps.map((step, idx) => {
-                                                const isActive = idx <= currentStepIdx;
-                                                const isCurrent = idx === currentStepIdx;
-                                                return `
-                                                    <div class="flex flex-col items-center">
-                                                        <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${isCurrent ? 'bg-veg-600 text-white ring-4 ring-veg-100' : isActive ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400'}">
-                                                            ${isActive ? '✓' : idx + 1}
-                                                        </div>
-                                                        <span class="text-[9px] font-bold mt-1 leading-tight ${isActive ? 'text-slate-900' : 'text-slate-400'}">${step.label}</span>
-                                                    </div>
-                                                `;
-                                            }).join('')}
-                                        </div>
-                                    </div>
-                                `}
-
-                                <!-- ITEMS BREAKDOWN -->
-                                <div class="bg-slate-50 rounded-2xl p-3 text-xs space-y-1 text-slate-700">
-                                    ${order.items.map(it => `
-                                        <div class="flex justify-between font-medium">
-                                            <span>🟢 ${it.name} x ${it.qty}</span>
-                                            <span>₹${it.price * it.qty}</span>
-                                        </div>
-                                    `).join('')}
-                                </div>
-
-                                <div class="flex justify-between items-center text-xs pt-2">
-                                    <span class="text-slate-500 font-medium">Need help with order?</span>
-                                    <a href="tel:${window.AppState.config.phone}" class="bg-slate-800 text-white px-3 py-1.5 rounded-xl font-bold">Call Kitchen</a>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-        }
-
-        /* CUSTOMER PROFILE VIEW */
-        function renderCustomerProfileView() {
-            return `
-                <div class="max-w-xl mx-auto bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-16 h-16 rounded-full bg-veg-100 text-veg-800 flex items-center justify-center font-black text-2xl border-2 border-veg-300">
-                            GK
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-black text-slate-900">${window.AppState.customerProfile.name}</h3>
-                            <p class="text-xs font-semibold text-slate-500">+91 ${window.AppState.customerProfile.phone}</p>
-                            <span class="inline-block mt-1 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded">Verified Pure Veg Customer</span>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-4 space-y-3">
-                        <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Saved Delivery Address</h4>
-                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-xs text-slate-700">
-                            <p class="font-bold text-slate-900 mb-1">${window.AppState.customerProfile.address}</p>
-                            <p class="text-slate-500">Landmark: ${window.AppState.customerProfile.landmark}</p>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-4">
-                        <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2">Shree Malook Kitchen Rules</h4>
-                        <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
-                            <li>100% Strictly Pure Vegetarian Kitchen (No Non-Veg or Egg).</li>
-                            <li>Separate Kitchen Vessels for Sattvik preparation.</li>
-                            <li>Direct Restaurant Delivery within ${window.AppState.config.deliveryRadiusKm} KM radius.</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderAdminView() {
-            const pendingOrdersCount = window.AppState.orders.filter(o => o.status === 'NEW').length;
-            const totalSalesToday = window.AppState.orders.filter(o => o.status === 'DELIVERED').reduce((s, o) => s + o.total, 0);
-
-            return `
-                <div class="space-y-6 pb-12">
-                    
-                    <!-- ADMIN MOBILE TOP SWITCHER & METRICS -->
-                    <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-2xl border border-slate-800 space-y-4">
-                        <div class="flex flex-wrap justify-between items-center gap-3">
+                return `
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-md p-5 space-y-4">
+                        <div class="flex justify-between items-start border-b border-slate-100 pb-3">
                             <div>
-                                <span class="text-[10px] font-black uppercase text-amber-400 tracking-wider">Kitchen Control Center</span>
-                                <h2 class="text-xl font-black text-white">RESTAURANT ADMIN MOBILE PORTAL</h2>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-black text-slate-900 text-base">Order #${order.orderId}</span>
+                                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded">100% PURE VEG</span>
+                                </div>
+                                <div class="text-[11px] text-slate-400 font-medium">${new Date(order.createdAt).toLocaleString()}</div>
                             </div>
-                            <!-- MASTER ON/OFF SWITCH BUTTON -->
-                            <div class="flex items-center space-x-2">
-                                <button onclick="toggleRestaurantMasterStatus()" class="px-5 py-3 rounded-2xl font-black text-xs shadow-lg transition flex items-center space-x-2 ${window.AppState.config.isOpen ? 'bg-emerald-600 hover:bg-emerald-700 text-white animate-pulse' : 'bg-red-600 hover:bg-red-700 text-white'}">
-                                    <span>${window.AppState.config.isOpen ? '🟢 RESTAURANT ON' : '🔴 RESTAURANT OFF'}</span>
-                                </button>
-                                <button onclick="updateClosedReasonMessage()" class="bg-slate-800 text-slate-300 p-2.5 rounded-2xl hover:text-white" title="Edit Closed Message">⚙️</button>
-                            </div>
+                            <span class="px-3 py-1 rounded-full text-xs font-black ${
+                                isCancelled ? 'bg-red-100 text-red-800' :
+                                order.status === 'DELIVERED' ? 'bg-emerald-100 text-emerald-800' :
+                                'bg-amber-100 text-amber-800 animate-pulse'
+                            }">
+                                ${order.status.replace(/_/g, ' ')}
+                            </span>
                         </div>
 
-                        <!-- LIVE METRICS DASHBOARD -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                            <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700 text-center">
-                                <span class="text-2xl font-black ${pendingOrdersCount > 0 ? 'text-red-400 animate-bounce' : 'text-slate-300'}">${pendingOrdersCount}</span>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase">🔔 New Alerts</p>
+                        ${isCancelled ? `
+                            <div class="bg-red-50 border border-red-200 text-red-800 p-3 rounded-xl text-xs font-semibold">
+                                🔴 Order Cancelled: "${order.cancelledReason || 'Kitchen Busy'}"
                             </div>
-                            <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700 text-center">
-                                <span class="text-2xl font-black text-amber-400">${window.AppState.orders.filter(o => ['ACCEPTED','PREPARING','READY'].includes(o.status)).length}</span>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase">👨‍🍳 Kitchen Active</p>
+                        ` : `
+                            <!-- LIVE TRACKING TIMELINE -->
+                            <div class="py-2">
+                                <div class="text-xs font-bold text-slate-700 mb-2 flex justify-between">
+                                    <span>Live Delivery Timeline</span>
+                                    ${order.prepTimeMinutes ? `<span class="text-emerald-600 font-black">Est. Prep Time: ${order.prepTimeMinutes} Mins</span>` : ''}
+                                </div>
+                                <div class="grid grid-cols-5 gap-1 text-center">
+                                    ${statusSteps.slice(1).map((st, idx) => {
+                                        const isDone = currentStepIdx >= (idx + 1);
+                                        const isCurrent = currentStepIdx === (idx + 1);
+                                        return `
+                                            <div class="flex flex-col items-center">
+                                                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-1 ${
+                                                    isDone ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-400'
+                                                } ${isCurrent ? 'ring-4 ring-emerald-200 scale-110' : ''}">
+                                                    ${isDone ? '✓' : idx + 1}
+                                                </div>
+                                                <span class="text-[9px] font-bold ${isDone ? 'text-emerald-800' : 'text-slate-400'}">
+                                                    ${st.replace(/_/g, ' ')}
+                                                </span>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
                             </div>
-                            <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700 text-center">
-                                <span class="text-2xl font-black text-emerald-400">₹${totalSalesToday}</span>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase">💰 Today Sales</p>
-                            </div>
-                            <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700 text-center">
-                                <span class="text-2xl font-black text-sky-400">${window.AppState.orders.filter(o => o.status === 'DELIVERED').length}</span>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase">✅ Delivered</p>
+                        `}
+
+                        <!-- Order Items List -->
+                        <div class="bg-slate-50 p-3 rounded-2xl text-xs space-y-1">
+                            <div class="font-bold text-slate-700 mb-1">Ordered Veg Items:</div>
+                            ${order.items.map(i => `
+                                <div class="flex justify-between text-slate-600">
+                                    <span>🟢 ${i.name} (x${i.qty})</span>
+                                    <span class="font-bold">₹${i.subtotal}</span>
+                                </div>
+                            `).join('')}
+                            <div class="border-t border-slate-200 pt-2 flex justify-between font-black text-slate-900 text-sm">
+                                <span>Grand Total</span>
+                                <span class="text-emerald-700">₹${order.grandTotal} (${order.paymentMethod})</span>
                             </div>
                         </div>
                     </div>
+                `;
+            }).join('');
+        };
 
-                    <!-- ADMIN ORDERS LIST SECTION -->
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-base font-black text-slate-900 uppercase tracking-wide">
-                                Real-time Orders Feed (${window.AppState.orders.length})
-                            </h3>
-                            <button onclick="openAddMenuItemModal()" class="bg-veg-700 hover:bg-veg-800 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
-                                + Add Dish
-                            </button>
+        window.authenticateAdmin = function() {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === 'admin123' || pass === 'admin') {
+                AppState.isAdminLoggedIn = true;
+                document.getElementById('admin-login-card').classList.add('hidden');
+                document.getElementById('admin-dashboard-content').classList.remove('hidden');
+                renderAdminOrdersFeed();
+                renderAdminMenuItems();
+                updateSalesStats();
+                checkAndPlayAlarmLoop();
+            } else {
+                alert("Invalid Passcode! Try: admin123");
+            }
+        };
+
+        window.toggleRestaurantStatus = async function(shouldBeOpen) {
+            AppState.settings.isOpen = shouldBeOpen;
+            
+            if (isFirebaseOnline) {
+                const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'restaurant_settings', 'config');
+                await setDoc(settingsDocRef, { isOpen: shouldBeOpen }, { merge: true });
+            }
+            renderSettingsUI();
+            
+            const msgEditor = document.getElementById('closed-msg-editor');
+            if (!shouldBeOpen && msgEditor) {
+                msgEditor.classList.remove('hidden');
+            } else if (msgEditor) {
+                msgEditor.classList.add('hidden');
+            }
+        };
+
+        window.saveClosedMessage = async function() {
+            const msg = document.getElementById('custom-closed-msg').value.trim();
+            if (!msg) return;
+            AppState.settings.closedMessage = msg;
+            if (isFirebaseOnline) {
+                const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'restaurant_settings', 'config');
+                await setDoc(settingsDocRef, { closedMessage: msg }, { merge: true });
+            }
+            renderSettingsUI();
+            alert("Closed message updated!");
+        };
+
+        let currentAdminFilter = 'ALL';
+        window.filterAdminOrders = function(status) {
+            currentAdminFilter = status;
+            renderAdminOrdersFeed();
+        };
+
+        window.renderAdminOrdersFeed = function() {
+            const container = document.getElementById('admin-orders-feed');
+            if (!container) return;
+
+            const filtered = AppState.orders.filter(o => currentAdminFilter === 'ALL' || o.status === currentAdminFilter);
+
+            // Update New Order Badge count
+            const newCount = AppState.orders.filter(o => o.status === 'NEW').length;
+            const badge = document.getElementById('badge-new-count');
+            if (newCount > 0) {
+                badge.innerText = newCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-400 font-bold bg-white rounded-3xl border border-slate-200">No orders matching filter.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(order => {
+                const isNew = order.status === 'NEW';
+                const mapQuery = encodeURIComponent(order.address + " " + (order.landmark || ""));
+
+                return `
+                    <div class="bg-white rounded-3xl border-2 ${isNew ? 'border-red-500 shadow-xl alarm-flash' : 'border-slate-200 shadow-md'} p-5 space-y-4">
+                        <!-- Card Header -->
+                        <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    ${isNew ? '<span class="px-2 py-0.5 bg-red-600 text-white font-black text-xs rounded-full animate-bounce">🔔 NEW ORDER</span>' : ''}
+                                    <span class="font-black text-slate-900 text-lg">#${order.orderId}</span>
+                                </div>
+                                <div class="text-xs text-slate-500 font-semibold">${new Date(order.createdAt).toLocaleTimeString()}</div>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-black text-emerald-700 text-lg">₹${order.grandTotal}</span>
+                                <div class="text-[10px] font-bold text-slate-500 uppercase">${order.paymentMethod} (${order.paymentStatus})</div>
+                            </div>
                         </div>
 
-                        ${window.AppState.orders.length === 0 ? `
-                            <div class="bg-white rounded-3xl p-8 text-center border border-slate-200">
-                                <p class="text-slate-400 text-sm font-bold">No orders received yet. Waiting for incoming customers!</p>
+                        <!-- Customer Details & Quick Contact Buttons -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-2xl text-xs">
+                            <div>
+                                <div class="font-black text-slate-900 text-sm">${order.customerName}</div>
+                                <div class="text-slate-600 font-bold">${order.address}</div>
+                                ${order.landmark ? `<div class="text-slate-500">Landmark: ${order.landmark}</div>` : ''}
+                                ${order.notes ? `<div class="text-amber-700 font-semibold mt-1">Note: "${order.notes}"</div>` : ''}
                             </div>
-                        ` : window.AppState.orders.map(order => renderAdminOrderCard(order)).join('')}
-                    </div>
+                            <div class="flex flex-row sm:flex-col justify-end gap-2">
+                                <a href="tel:${order.customerPhone}" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-center flex items-center justify-center space-x-1">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <span>CALL</span>
+                                </a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" class="flex-1 py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-center flex items-center justify-center space-x-1">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                    <span>MAP</span>
+                                </a>
+                            </div>
+                        </div>
 
-                    <!-- ADMIN ITEM ON/OFF QUICK MANAGEMENT -->
-                    <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-wide">
-                            Dish Stock ON / OFF Control
-                        </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                            ${window.AppState.menu.map(item => `
-                                <div class="flex items-center justify-between p-3 rounded-2xl border ${item.available ? 'border-slate-200 bg-slate-50' : 'border-red-200 bg-red-50'}">
-                                    <div class="truncate pr-2">
-                                        <p class="text-xs font-extrabold text-slate-900 truncate">🟢 ${item.name}</p>
-                                        <p class="text-[10px] text-slate-500">₹${item.price} • ${item.category}</p>
-                                    </div>
-                                    <div class="flex items-center space-x-1">
-                                        <button onclick="toggleMenuItemAvailability('${item.id}', ${item.available})" class="px-2.5 py-1 rounded-xl text-[10px] font-extrabold shadow ${item.available ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'}">
-                                            ${item.available ? 'AVAILABLE 🟢' : 'SOLD OUT 🔴'}
-                                        </button>
-                                        <button onclick="deleteMenuItem('${item.id}')" class="text-slate-400 hover:text-red-600 p-1">🗑️</button>
-                                    </div>
+                        <!-- Ordered Food Items -->
+                        <div class="space-y-1 text-xs">
+                            <div class="font-bold text-slate-700">Food Items:</div>
+                            ${order.items.map(i => `
+                                <div class="flex justify-between font-medium text-slate-800">
+                                    <span>🟢 ${i.name} x ${i.qty}</span>
+                                    <span>₹${i.subtotal}</span>
                                 </div>
                             `).join('')}
                         </div>
-                    </div>
 
-                </div>
-            `;
-        }
-
-        /* ADMIN ORDER CARD SPECIFIC FOR MOBILE SCREEN */
-        function renderAdminOrderCard(order) {
-            const isNew = order.status === 'NEW';
-            const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address + ' ' + order.landmark)}`;
-
-            return `
-                <div class="bg-white rounded-3xl p-5 border-2 ${isNew ? 'border-red-500 animate-ring-alert shadow-xl' : 'border-slate-200 shadow-sm'} space-y-4">
-                    
-                    <!-- NEW ORDER HEADER ALERT -->
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-black px-2.5 py-0.5 rounded-full ${isNew ? 'bg-red-600 text-white animate-pulse' : 'bg-slate-100 text-slate-700'}">
-                                    ${isNew ? '🔔 NEW ORDER' : order.status}
-                                </span>
-                                <span class="text-xs font-bold text-slate-400">#${order.orderId}</span>
-                            </div>
-                            <h4 class="text-lg font-black text-slate-900">${order.customerName}</h4>
-                            <p class="text-xs font-bold text-veg-700">📞 ${order.customerPhone}</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xl font-black text-slate-900">₹${order.total}</span>
-                            <p class="text-[10px] font-extrabold ${order.paymentStatus === 'Paid' ? 'text-emerald-700' : 'text-amber-700'}">${order.paymentMethod} (${order.paymentStatus})</p>
-                        </div>
-                    </div>
-
-                    <!-- ADDRESS & ACTION MAP BUTTONS -->
-                    <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-xs space-y-2">
-                        <p class="text-slate-800 font-medium"><strong>Address:</strong> ${order.address}</p>
-                        <p class="text-slate-600"><strong>Landmark:</strong> ${order.landmark}</p>
-                        ${order.notes ? `<p class="text-amber-800 bg-amber-50 p-1.5 rounded font-bold">Note: ${order.notes}</p>` : ''}
-                        
-                        <div class="flex gap-2 pt-1">
-                            <a href="tel:${order.customerPhone}" class="flex-1 bg-emerald-700 text-white text-center py-2 rounded-xl font-bold text-xs flex justify-center items-center gap-1">
-                                📞 Call Customer
-                            </a>
-                            <a href="${mapUrl}" target="_blank" class="flex-1 bg-sky-600 text-white text-center py-2 rounded-xl font-bold text-xs flex justify-center items-center gap-1">
-                                📍 Open Map
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- ITEMS LIST -->
-                    <div class="space-y-1 text-xs text-slate-700 border-t border-b border-slate-100 py-2">
-                        ${order.items.map(it => `
-                            <div class="flex justify-between font-bold">
-                                <span>🟢 ${it.name} x ${it.qty}</span>
-                                <span>₹${it.price * it.qty}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <!-- HUGE MOBILE ACCEPT / CANCEL BUTTONS -->
-                    ${isNew ? `
-                        <div class="grid grid-cols-2 gap-3 pt-1">
-                            <button onclick="acceptOrderPrompt('${order.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition flex justify-center items-center gap-1">
-                                <span>🟢 ACCEPT ORDER</span>
-                            </button>
-                            <button onclick="cancelOrderPrompt('${order.id}')" class="bg-red-600 hover:bg-red-700 text-white py-3.5 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition flex justify-center items-center gap-1">
-                                <span>🔴 CANCEL ORDER</span>
-                            </button>
-                        </div>
-                    ` : order.status !== 'DELIVERED' && order.status !== 'CANCELLED' ? `
-                        <div class="flex flex-wrap gap-2 pt-1">
-                            ${order.status === 'ACCEPTED' ? `
-                                <button onclick="updateOrderStatus('${order.id}', 'PREPARING')" class="flex-1 bg-amber-500 text-white py-2.5 rounded-xl font-extrabold text-xs">👨‍🍳 Start Preparing</button>
+                        <!-- PROMINENT ORDER STATUS ACTION BUTTONS -->
+                        <div class="pt-2 border-t border-slate-100 flex flex-wrap gap-2">
+                            ${isNew ? `
+                                <button onclick="openAcceptModal('${order.orderId}')" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-lg transition-transform active:scale-95">
+                                    🟢 ACCEPT ORDER
+                                </button>
+                                <button onclick="openCancelModal('${order.orderId}')" class="py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-black text-xs rounded-xl shadow transition-transform active:scale-95">
+                                    🔴 CANCEL
+                                </button>
+                            ` : order.status === 'ACCEPTED' ? `
+                                <button onclick="updateOrderStatus('${order.orderId}', 'PREPARING')" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow">
+                                    👨‍🍳 START PREPARING
+                                </button>
+                            ` : order.status === 'PREPARING' ? `
+                                <button onclick="updateOrderStatus('${order.orderId}', 'READY')" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-xl shadow">
+                                    📦 MARK FOOD READY
+                                </button>
+                            ` : order.status === 'READY' ? `
+                                <button onclick="updateOrderStatus('${order.orderId}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-black text-xs rounded-xl shadow">
+                                    🛵 DISPATCH (OUT FOR DELIVERY)
+                                </button>
+                            ` : order.status === 'OUT_FOR_DELIVERY' ? `
+                                <button onclick="updateOrderStatus('${order.orderId}', 'DELIVERED')" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow">
+                                    ✅ MARK DELIVERED
+                                </button>
                             ` : ''}
-                            ${order.status === 'PREPARING' ? `
-                                <button onclick="updateOrderStatus('${order.id}', 'READY')" class="flex-1 bg-indigo-600 text-white py-2.5 rounded-xl font-extrabold text-xs">📦 Mark Ready</button>
-                            ` : ''}
-                            ${order.status === 'READY' ? `
-                                <button onclick="updateOrderStatus('${order.id}', 'OUT_FOR_DELIVERY')" class="flex-1 bg-sky-600 text-white py-2.5 rounded-xl font-extrabold text-xs">🛵 Out for Delivery</button>
-                            ` : ''}
-                            ${order.status === 'OUT_FOR_DELIVERY' ? `
-                                <button onclick="updateOrderStatus('${order.id}', 'DELIVERED')" class="flex-1 bg-emerald-600 text-white py-2.5 rounded-xl font-extrabold text-xs">✅ Mark Delivered</button>
+
+                            ${order.paymentStatus === 'UNPAID' && order.status !== 'CANCELLED' ? `
+                                <button onclick="markOrderPaid('${order.orderId}')" class="py-2 px-3 bg-slate-800 text-white text-xs font-bold rounded-xl">
+                                    💵 MARK PAID
+                                </button>
                             ` : ''}
                         </div>
-                    ` : ''}
-
-                </div>
-            `;
-        }
-
-        // Initialize App on DOM Load
-        window.onload = function() {
-            initAuthAndData();
+                    </div>
+                `;
+            }).join('');
         };
+
+        window.openAcceptModal = function(orderId) {
+            document.getElementById('accept-target-order-id').value = orderId;
+            document.getElementById('accept-modal').classList.remove('hidden');
+        };
+        window.closeAcceptModal = function() {
+            document.getElementById('accept-modal').classList.add('hidden');
+        };
+
+        window.confirmOrderAcceptance = async function(prepMins) {
+            const orderId = document.getElementById('accept-target-order-id').value;
+            closeAcceptModal();
+            await updateOrderStatus(orderId, 'ACCEPTED', { prepTimeMinutes: prepMins });
+        };
+
+        window.openCancelModal = function(orderId) {
+            document.getElementById('cancel-target-order-id').value = orderId;
+            document.getElementById('cancel-modal').classList.remove('hidden');
+        };
+        window.closeCancelModal = function() {
+            document.getElementById('cancel-modal').classList.add('hidden');
+        };
+
+        window.confirmOrderCancellation = async function() {
+            const orderId = document.getElementById('cancel-target-order-id').value;
+            const reasonRadio = document.querySelector('input[name="cancel-reason"]:checked')?.value;
+            const customReason = document.getElementById('cancel-custom-reason').value.trim();
+            const finalReason = customReason || reasonRadio || "Kitchen Busy";
+
+            closeCancelModal();
+            await updateOrderStatus(orderId, 'CANCELLED', { cancelledReason: finalReason });
+        };
+
+        window.updateOrderStatus = async function(orderId, newStatus, extraData = {}) {
+            const updateObj = { status: newStatus, ...extraData };
+            
+            if (isFirebaseOnline) {
+                const orderDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'orders', orderId);
+                await updateDoc(orderDocRef, updateObj);
+            } else {
+                const order = AppState.orders.find(o => o.orderId === orderId);
+                if (order) Object.assign(order, updateObj);
+            }
+            renderAdminOrdersFeed();
+            checkAndPlayAlarmLoop();
+        };
+
+        window.markOrderPaid = async function(orderId) {
+            if (isFirebaseOnline) {
+                const orderDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'orders', orderId);
+                await updateDoc(orderDocRef, { paymentStatus: 'PAID' });
+            } else {
+                const order = AppState.orders.find(o => o.orderId === orderId);
+                if (order) order.paymentStatus = 'PAID';
+            }
+            renderAdminOrdersFeed();
+        };
+
+        window.renderAdminMenuItems = function() {
+            const container = document.getElementById('admin-menu-items-list');
+            if (!container) return;
+
+            container.innerHTML = AppState.menuItems.map(item => `
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between space-x-3">
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover bg-slate-100" onerror="this.src='https://placehold.co/100'">
+                        <div>
+                            <div class="font-bold text-slate-900 text-xs">${item.name}</div>
+                            <div class="text-[10px] text-slate-500">₹${item.price} • ${item.category}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="toggleItemAvailable('${item.id}', ${!item.available})" class="px-3 py-1.5 text-xs font-bold rounded-lg ${
+                            item.available ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                        }">
+                            ${item.available ? 'AVAILABLE 🟢' : 'SOLD OUT 🔴'}
+                        </button>
+                        <button onclick="editDishModal('${item.id}')" class="p-1.5 text-slate-400 hover:text-slate-700"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.toggleItemAvailable = async function(itemId, status) {
+            if (isFirebaseOnline) {
+                const menuDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'menu_items', itemId);
+                await updateDoc(menuDocRef, { available: status });
+            } else {
+                const item = AppState.menuItems.find(i => i.id === itemId);
+                if (item) item.available = status;
+            }
+            renderFoodMenuGrid();
+            renderAdminMenuItems();
+        };
+
+        window.openAddDishModal = function() {
+            document.getElementById('dish-id').value = '';
+            document.getElementById('dish-name').value = '';
+            document.getElementById('dish-price').value = '';
+            document.getElementById('dish-desc').value = '';
+            document.getElementById('dish-image').value = '';
+            document.getElementById('dish-available').checked = true;
+            document.getElementById('dish-modal-title').innerText = "Add New Pure Veg Dish";
+            document.getElementById('dish-modal').classList.remove('hidden');
+        };
+
+        window.editDishModal = function(itemId) {
+            const item = AppState.menuItems.find(i => i.id === itemId);
+            if (!item) return;
+            document.getElementById('dish-id').value = item.id;
+            document.getElementById('dish-name').value = item.name;
+            document.getElementById('dish-price').value = item.price;
+            document.getElementById('dish-category').value = item.category;
+            document.getElementById('dish-desc').value = item.description || '';
+            document.getElementById('dish-image').value = item.image || '';
+            document.getElementById('dish-available').checked = item.available;
+            document.getElementById('dish-modal-title').innerText = "Edit Pure Veg Dish";
+            document.getElementById('dish-modal').classList.remove('hidden');
+        };
+
+        window.closeDishModal = function() {
+            document.getElementById('dish-modal').classList.add('hidden');
+        };
+
+        window.saveDishItem = async function() {
+            const id = document.getElementById('dish-id').value || 'm' + Date.now();
+            const name = document.getElementById('dish-name').value.trim();
+            const price = parseFloat(document.getElementById('dish-price').value);
+            const category = document.getElementById('dish-category').value;
+            const desc = document.getElementById('dish-desc').value.trim();
+            const image = document.getElementById('dish-image').value.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400';
+            const available = document.getElementById('dish-available').checked;
+
+            if (!name || isNaN(price)) {
+                alert("Please enter dish name and valid price.");
+                return;
+            }
+
+            const dishObj = { id, name, price, category, description: desc, image, available };
+
+            if (isFirebaseOnline) {
+                const menuDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'menu_items', id);
+                await setDoc(menuDocRef, dishObj, { merge: true });
+            } else {
+                const idx = AppState.menuItems.findIndex(i => i.id === id);
+                if (idx !== -1) AppState.menuItems[idx] = dishObj;
+                else AppState.menuItems.push(dishObj);
+            }
+
+            closeDishModal();
+            renderFoodMenuGrid();
+            renderAdminMenuItems();
+        };
+
+        // Sales Reports Analytics
+        function updateSalesStats() {
+            let totalRevenue = 0;
+            let deliveredCount = 0;
+            let cancelledCount = 0;
+
+            AppState.orders.forEach(o => {
+                if (o.status === 'DELIVERED') {
+                    totalRevenue += o.grandTotal;
+                    deliveredCount++;
+                } else if (o.status === 'CANCELLED') {
+                    cancelledCount++;
+                }
+            });
+
+            document.getElementById('stat-revenue').innerText = "₹" + totalRevenue;
+            document.getElementById('stat-total-orders').innerText = AppState.orders.length;
+            document.getElementById('stat-delivered-orders').innerText = deliveredCount;
+            document.getElementById('stat-cancelled-orders').innerText = cancelledCount;
+        }
+
+        // Settings save handler
+        window.saveAdminSettings = async function() {
+            const radius = parseFloat(document.getElementById('setting-radius').value);
+            const minOrder = parseFloat(document.getElementById('setting-min-order').value);
+            const fee = parseFloat(document.getElementById('setting-delivery-charge').value);
+            const freeAbove = parseFloat(document.getElementById('setting-free-delivery').value);
+            const wa = document.getElementById('setting-whatsapp').value.trim();
+
+            AppState.settings.radiusKm = radius;
+            AppState.settings.minOrder = minOrder;
+            AppState.settings.deliveryCharge = fee;
+            AppState.settings.freeDeliveryAbove = freeAbove;
+            AppState.settings.whatsapp = wa;
+
+            if (isFirebaseOnline) {
+                const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'restaurant_settings', 'config');
+                await setDoc(settingsDocRef, AppState.settings, { merge: true });
+            }
+            renderSettingsUI();
+            alert("Delivery & Threshold settings updated!");
+        };
+
+        window.switchView = function(viewName) {
+            AppState.view = viewName;
+            document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+            
+            if (viewName === 'customer-home') {
+                document.getElementById('view-customer-home').classList.remove('hidden');
+            } else if (viewName === 'customer-checkout') {
+                document.getElementById('view-customer-checkout').classList.remove('hidden');
+                updateCartSummaryUI();
+            } else if (viewName === 'customer-orders') {
+                document.getElementById('view-customer-orders').classList.remove('hidden');
+                renderCustomerOrders();
+            } else if (viewName === 'admin-panel') {
+                document.getElementById('view-admin-panel').classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.toggleAdminCustomerView = function() {
+            if (AppState.view === 'admin-panel') {
+                switchView('customer-home');
+                document.getElementById('view-toggle-text').innerText = "Admin Panel";
+            } else {
+                switchView('admin-panel');
+                document.getElementById('view-toggle-text').innerText = "Customer Website";
+            }
+        };
+
+        window.switchAdminTab = function(tabName) {
+            AppState.adminTab = tabName;
+            document.querySelectorAll('.adm-sub-panel').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.adm-tab-btn').forEach(el => {
+                el.className = "adm-tab-btn px-4 py-2 font-bold text-xs rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center space-x-1";
+            });
+
+            const activeBtn = document.getElementById(`adm-tab-${tabName}`);
+            if (activeBtn) {
+                activeBtn.className = "adm-tab-btn active px-4 py-2 font-black text-xs rounded-xl bg-emerald-600 text-white shadow-sm flex items-center space-x-2";
+            }
+
+            if (tabName === 'live-orders') document.getElementById('adm-view-live-orders').classList.remove('hidden');
+            else if (tabName === 'menu-mgr') document.getElementById('adm-view-menu-mgr').classList.remove('hidden');
+            else if (tabName === 'sales-report') document.getElementById('adm-view-sales-report').classList.remove('hidden');
+            else if (tabName === 'settings') {
+                document.getElementById('adm-view-settings').classList.remove('hidden');
+                document.getElementById('setting-radius').value = AppState.settings.radiusKm;
+                document.getElementById('setting-min-order').value = AppState.settings.minOrder;
+                document.getElementById('setting-delivery-charge').value = AppState.settings.deliveryCharge;
+                document.getElementById('setting-free-delivery').value = AppState.settings.freeDeliveryAbove;
+                document.getElementById('setting-whatsapp').value = AppState.settings.whatsapp;
+            }
+        };
+
+        // App Initialization on Window Load
+        window.addEventListener('load', async () => {
+            await initFirestoreListeners();
+            renderSettingsUI();
+            renderCategoryPills();
+            renderFoodMenuGrid();
+        });
     </script>
 </body>
 </html>
